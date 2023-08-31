@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: admin
+    password: admin
+    url: jdbc:postgresql://localhost:5432/test-db
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    defer-datasource-initialization: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
