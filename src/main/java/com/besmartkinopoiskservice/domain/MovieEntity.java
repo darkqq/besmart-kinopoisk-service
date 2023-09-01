@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,9 +22,12 @@ public class MovieEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    private byte[] image;
     private String title;
-
     private String description;
+    private double boxOffice;
+
+    private LocalDate premiere;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -44,4 +48,20 @@ public class MovieEntity {
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private List<ActorEntity> actors = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_director",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "director_id")
+    )
+    private List<DirectorEntity> directors = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_user_favorite",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> inUserFavorite = new ArrayList<>();
 }

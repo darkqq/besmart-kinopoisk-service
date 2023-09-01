@@ -40,4 +40,10 @@ public class UserEntity {
             mappedBy = "rater"
     )
     private List<RatingEntity> ratings = new ArrayList<>();
+
+    @ManyToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "inUserFavorite"
+    )
+    private List<MovieEntity> favoriteMovies = new ArrayList<>();
 }
