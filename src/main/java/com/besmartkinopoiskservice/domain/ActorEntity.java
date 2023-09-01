@@ -22,7 +22,7 @@ public class ActorEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private byte[] image;
+    private UUID image;
     private String name;
     private String description;
     private LocalDate birthday;

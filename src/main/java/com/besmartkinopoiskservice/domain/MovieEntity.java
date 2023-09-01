@@ -22,7 +22,7 @@ public class MovieEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private byte[] image;
+    private UUID image;
     private String title;
     private String description;
     private double boxOffice;
