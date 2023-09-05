@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetUserCommentsResponseTO {
+public class GetCommentsResponseTO {
     private List<CommentDetailsTO> comments;
 }

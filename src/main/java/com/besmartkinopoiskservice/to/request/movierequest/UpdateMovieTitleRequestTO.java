@@ -1,4 +1,4 @@
-package com.besmartkinopoiskservice.to.request;
+package com.besmartkinopoiskservice.to.request.movierequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class DeleteFavoriteRequestTO {
-    private UUID userId;
+public class UpdateMovieTitleRequestTO {
     private UUID movieId;
+    private String title;
 }

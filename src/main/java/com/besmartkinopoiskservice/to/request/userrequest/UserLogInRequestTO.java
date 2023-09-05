@@ -1,15 +1,13 @@
-package com.besmartkinopoiskservice.to.request;
+package com.besmartkinopoiskservice.to.request.userrequest;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserRegisterRequestTO {
+public class UserLogInRequestTO {
     private String username;
     private String password;
-    private String passwordConfirmation;
-    private String email;
 }

@@ -1,4 +1,4 @@
-package com.besmartkinopoiskservice.to.response;
+package com.besmartkinopoiskservice.to.response.userresponses;
 
 
 import lombok.AllArgsConstructor;

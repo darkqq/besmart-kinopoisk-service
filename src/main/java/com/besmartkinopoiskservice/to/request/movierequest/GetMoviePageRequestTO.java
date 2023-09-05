@@ -1,13 +1,14 @@
-package com.besmartkinopoiskservice.to.request;
+package com.besmartkinopoiskservice.to.request.movierequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class UserLogInRequestTO {
-    private String username;
-    private String password;
+public class GetMoviePageRequestTO {
+    private UUID movieID;
 }
