@@ -1,4 +1,4 @@
-package com.besmartkinopoiskservice.to.request.movierequest;
+package com.besmartkinopoiskservice.to.response.movieresposes;
 
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 

@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/favorite/")
-    public ResponseEntity<GetUserFavoriteResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
+    public ResponseEntity<GetMoviesListResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 

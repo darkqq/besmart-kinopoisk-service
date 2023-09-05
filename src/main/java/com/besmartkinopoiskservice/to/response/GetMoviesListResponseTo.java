@@ -1,4 +1,4 @@
-package com.besmartkinopoiskservice.to.response.userresponses;
+package com.besmartkinopoiskservice.to.response;
 
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetUserFavoriteResponseTo {
+public class GetMoviesListResponseTo {
     private List<MovieDetailsTO> favoriteMovies;
 }

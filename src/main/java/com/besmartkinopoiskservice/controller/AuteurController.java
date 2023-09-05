@@ -1,55 +1,71 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.to.request.auteurrequest.*;
+import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
+import com.besmartkinopoiskservice.to.response.GetMoviesListResponseTo;
+import com.besmartkinopoiskservice.to.response.auteurresponse.GetAuteurPageResponseTO;
+import com.besmartkinopoiskservice.to.response.auteurresponse.GetAuteurResponseTO;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auteur")
 @RequiredArgsConstructor
 public class AuteurController {
-    @PostMapping("/add")
-    public ResponseEntity<Response> addAuteur(@RequestBody Request request) {
+    @PostMapping("/create")
+    public ResponseEntity<EmptyResponseTO> createAuteur(@RequestBody CreateAuteurRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Response> deleteAuteur(@RequestBody Request request) {
+    public ResponseEntity<EmptyResponseTO> deleteAuteur(@RequestBody DeleteAuteurRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("")
-    public ResponseEntity<Response> getAuteur(@RequestBody Request request) {
+    @GetMapping("")
+    public ResponseEntity<GetAuteurPageResponseTO> getAuteur(@RequestParam(name = "name") String name) {
+        return ResponseEntity.ok(null);
+    }
+
+    //moderator, admin
+    @GetMapping("/info")
+    public ResponseEntity<GetAuteurResponseTO> getAuteurInfo(@RequestParam(name = "name") String name) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/update/name")
-    public ResponseEntity<Response> updateAuteurName(@RequestBody Request request) {
+    public ResponseEntity<EmptyResponseTO> updateAuteurName(@RequestBody UpdateAuteurNameRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/update/description")
-    public ResponseEntity<Response> updateAuteurDescription(@RequestBody Request request) {
+    public ResponseEntity<EmptyResponseTO> updateAuteurDescription(@RequestBody UpdateAuteurDescriptionRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/update/birthday")
-    public ResponseEntity<Response> updateAuteurBirthday(@RequestBody Request request) {
+    public ResponseEntity<EmptyResponseTO> updateAuteurBirthday(@RequestBody UpdateAuteurBirthdayRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     @PostMapping("/update/photo")
-    public ResponseEntity<Response> updateAuteurPhoto(@RequestBody Request request) {
+    public ResponseEntity<EmptyResponseTO> updateAuteurPhoto(@RequestBody UpdateAuteurPhotoRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/movies")
-    public ResponseEntity<Response> addAuteurMovies(@RequestBody Request request) {
+    @GetMapping("/movies")
+    public ResponseEntity<GetMoviesListResponseTo> getAuteurMovies(@RequestParam(name = "name") String name) {
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/movies/add")
+    public ResponseEntity<EmptyResponseTO> addAuteurMovies(@RequestBody UpdateAuteurMovieRequestTO request) {
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/movies/delete")
+    public ResponseEntity<EmptyResponseTO> deleteAuteurMovies(@RequestBody UpdateAuteurMovieRequestTO request) {
         return ResponseEntity.ok(null);
     }
 }
