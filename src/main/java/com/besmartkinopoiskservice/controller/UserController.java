@@ -1,5 +1,7 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.ServiceException;
+import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.userrequest.*;
 import com.besmartkinopoiskservice.to.response.*;
 import com.besmartkinopoiskservice.to.response.userresponses.*;
@@ -11,10 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseTO> registerUser(@RequestBody UserRegisterRequestTO request) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<AuthenticationResponseTO> registerUser(@RequestBody UserRegisterRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(userService.registerUser(request));
     }
 
     @PostMapping("/login")
