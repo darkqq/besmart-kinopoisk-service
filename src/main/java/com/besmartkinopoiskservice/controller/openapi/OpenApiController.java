@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *  Redirection to OpenAPI api documentation
  */
 @OpenAPIDefinition(
-        info = @Info(title = "ParkingMiddlewareService",
-                description = "Middleware service connecting UI and UDP linux kernel OCR tool",
+        info = @Info(title = "BesmartKinopoiskService",
+                description = "Movies, users, pain",
                 version = "0.0.1"),
         servers = {
                 @Server(url = "${server.servlet.context-path:}", description = "API single instance"),
