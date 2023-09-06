@@ -32,37 +32,37 @@ public class MovieController {
     }
 
     //admin
-    @PostMapping("/update/actors/add")
+    @PutMapping("/update/actors/add")
     public ResponseEntity<EmptyResponseTO> addMovieActor(@RequestBody AddMovieAuthorRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //admin
-    @PostMapping("/update/actors/delete")
+    @PutMapping("/update/actors/delete")
     public ResponseEntity<EmptyResponseTO> deleteMovieActor(@RequestBody DeleteMovieAuthorRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //admin
-    @PostMapping("/update/directors/add")
+    @PutMapping("/update/directors/add")
     public ResponseEntity<EmptyResponseTO> addMovieDirector(@RequestBody AddMovieAuthorRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //admin
-    @PostMapping("/update/directors/delete")
+    @PutMapping("/update/directors/delete")
     public ResponseEntity<EmptyResponseTO> deleteMovieDirector(@RequestBody DeleteMovieAuthorRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //admin
-    @PostMapping("/update/picture")
+    @PutMapping("/update/picture")
     public ResponseEntity<EmptyResponseTO> updateMoviePicture(@RequestBody UpdateMoviePictureRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //admin
-    @PostMapping("/update/description")
+    @PutMapping("/update/description")
     public ResponseEntity<EmptyResponseTO> updateMovieDescription(@RequestBody UpdateMovieDescriptionRequestTO request) {
         return ResponseEntity.ok(null);
     }

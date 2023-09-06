@@ -29,7 +29,7 @@ public class UserController {
 
     //owner, admin
     @GetMapping("/info")
-    public ResponseEntity<GetUserResponseTO> getUser(@RequestParam(name = "username") String username) {
+    public ResponseEntity<GetUserResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 
@@ -50,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/favorite/")
+    @GetMapping("/favorites")
     public ResponseEntity<GetMoviesListResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/auteur")
 @RequiredArgsConstructor
@@ -24,32 +26,32 @@ public class AuteurController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetAuteurPageResponseTO> getAuteur(@RequestParam(name = "name") String name) {
+    public ResponseEntity<GetAuteurPageResponseTO> getAuteurPage(@RequestParam(name = "id") UUID id) {
         return ResponseEntity.ok(null);
     }
 
     //moderator, admin
     @GetMapping("/info")
-    public ResponseEntity<GetAuteurResponseTO> getAuteurInfo(@RequestParam(name = "name") String name) {
+    public ResponseEntity<GetAuteurResponseTO> getAuteurInfo(@RequestParam(name = "id") UUID id) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/update/name")
+    @PutMapping("/update/name")
     public ResponseEntity<EmptyResponseTO> updateAuteurName(@RequestBody UpdateAuteurNameRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/update/description")
+    @PutMapping("/update/description")
     public ResponseEntity<EmptyResponseTO> updateAuteurDescription(@RequestBody UpdateAuteurDescriptionRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/update/birthday")
+    @PutMapping("/update/birthday")
     public ResponseEntity<EmptyResponseTO> updateAuteurBirthday(@RequestBody UpdateAuteurBirthdayRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
-    @PostMapping("/update/photo")
+    @PutMapping("/update/photo")
     public ResponseEntity<EmptyResponseTO> updateAuteurPhoto(@RequestBody UpdateAuteurPhotoRequestTO request) {
         return ResponseEntity.ok(null);
     }
