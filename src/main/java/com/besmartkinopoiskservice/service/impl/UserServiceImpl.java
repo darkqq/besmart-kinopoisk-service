@@ -6,6 +6,7 @@ import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.UserRepository;
 import com.besmartkinopoiskservice.service.JwtService;
 import com.besmartkinopoiskservice.service.UserService;
+import com.besmartkinopoiskservice.to.request.userrequest.UserLogInRequestTO;
 import com.besmartkinopoiskservice.to.request.userrequest.UserRegisterRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.userresponses.AuthenticationResponseTO;
@@ -13,6 +14,7 @@ import com.besmartkinopoiskservice.util.ValidationResult;
 import com.besmartkinopoiskservice.util.ValidationUserCredentials;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,10 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Такой пользователь уже сущесвует");
         }
 
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new ServiceException("Пользователь с таким email уже существует");
+        }
+
         validationCheck(request.getUsername(), request.getPassword());
 
         if (!request.getPassword().equals(request.getPasswordConfirmation())){
@@ -47,6 +53,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
+        return AuthenticationResponseTO.builder().token(jwtToken).build();
+    }
+
+    @Override
+    public AuthenticationResponseTO userLogIn(UserLogInRequestTO request){
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+        var user = userRepository.findByUsername(request.getUsername());
+        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponseTO.builder().token(jwtToken).build();
     }
 
