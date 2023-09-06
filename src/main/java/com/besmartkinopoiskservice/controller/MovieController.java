@@ -4,6 +4,7 @@ import com.besmartkinopoiskservice.to.request.movierequest.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.GetCommentsResponseTO;
 import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageResponseTO;
+import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +69,12 @@ public class MovieController {
 
     @GetMapping("")
     public ResponseEntity<GetMoviePageResponseTO> getMoviePage(@RequestParam(name = "movie") String movieTitle) {
+        return ResponseEntity.ok(null);
+    }
+
+    //moder, admin
+    @GetMapping("/info")
+    public ResponseEntity<GetMovieResponseTO> getMovieInfo(@RequestParam(name = "movie") String movieTitle) {
         return ResponseEntity.ok(null);
     }
 
