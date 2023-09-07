@@ -1,5 +1,7 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.ServiceException;
+import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.request.movierequest.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.GetCommentsResponseTO;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/movie")
 @RequiredArgsConstructor
 public class MovieController {
+    private final MovieService movieService;
+
     //admin
     @PostMapping("/add")
-    public ResponseEntity<EmptyResponseTO> addMovie(@RequestBody CreateMoviePageRequestTO request) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<EmptyResponseTO> addMovie(@RequestBody CreateMoviePageRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(movieService.addMovieToDatabase(request));
     }
 
     //admin
