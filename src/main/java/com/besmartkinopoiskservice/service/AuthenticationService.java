@@ -5,6 +5,8 @@ import com.besmartkinopoiskservice.to.request.userrequest.UserLogInRequestTO;
 import com.besmartkinopoiskservice.to.request.userrequest.UserRegisterRequestTO;
 import com.besmartkinopoiskservice.to.response.userresponses.AuthenticationResponseTO;
 
-public interface UserService {
+public interface AuthenticationService {
+    AuthenticationResponseTO registerUser(UserRegisterRequestTO request) throws ServiceException;
 
+    AuthenticationResponseTO userLogIn(UserLogInRequestTO request);
 }
