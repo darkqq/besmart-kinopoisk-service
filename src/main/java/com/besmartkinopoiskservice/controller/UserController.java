@@ -1,5 +1,7 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.ServiceException;
+import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.userrequest.*;
 import com.besmartkinopoiskservice.to.response.*;
 import com.besmartkinopoiskservice.to.response.userresponses.*;
@@ -11,16 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseTO> registerUser(@RequestBody UserRegisterRequestTO request) {
-        return ResponseEntity.ok(null);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseTO> loginUser(@RequestBody UserLogInRequestTO request) {
-        return ResponseEntity.ok(null);
-    }
+    private final UserService userService;
 
     @GetMapping("")
     public ResponseEntity<GetUserPageResponseTO> getUserPage(@RequestParam(name = "username") String username) {
@@ -66,5 +59,4 @@ public class UserController {
     public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestBody DeleteFavoriteRequestTO request) {
         return ResponseEntity.ok(null);
     }
-
 }

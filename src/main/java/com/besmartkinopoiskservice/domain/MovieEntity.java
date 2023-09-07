@@ -26,7 +26,6 @@ public class MovieEntity {
     private String title;
     private String description;
     private double boxOffice;
-
     private LocalDate premiere;
 
     @OneToMany(
