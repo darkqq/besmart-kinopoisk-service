@@ -24,9 +24,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/user/register")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/user/login")).permitAll()
-                        .anyRequest().permitAll())
+                        .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

@@ -15,16 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponseTO> registerUser(@RequestBody UserRegisterRequestTO request) throws ServiceException {
-        return ResponseEntity.ok(userService.registerUser(request));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseTO> loginUser(@RequestBody UserLogInRequestTO request) {
-        return ResponseEntity.ok(userService.userLogIn(request));
-    }
-
     @GetMapping("")
     public ResponseEntity<GetUserPageResponseTO> getUserPage(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
@@ -69,5 +59,4 @@ public class UserController {
     public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestBody DeleteFavoriteRequestTO request) {
         return ResponseEntity.ok(null);
     }
-
 }
