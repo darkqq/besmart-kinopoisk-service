@@ -27,9 +27,9 @@ public class DirectorEntity {
     private String description;
     private LocalDate birthday;
 
-    @ManyToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "directors"
-    )
-    private List<MovieEntity> movies = new ArrayList<>();
+//    @ManyToMany(
+//            cascade = CascadeType.ALL,
+//            mappedBy = "directors"
+//    )
+//    private List<MovieEntity> movies = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.besmartkinopoiskservice.security;
 
+import com.besmartkinopoiskservice.enumeration.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/movie")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/movie/add")).hasAuthority(Role.ADMIN.toString())
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

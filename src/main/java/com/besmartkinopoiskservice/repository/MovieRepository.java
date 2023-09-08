@@ -9,6 +9,6 @@ import java.time.LocalDate;
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     boolean existsByTitle(String title);
-
     boolean existsByPremiere(LocalDate premiere);
+    MovieEntity findByTitle(String title);
 }

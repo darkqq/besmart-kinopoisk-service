@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ACTOR")
+@Table(name = "AUTHOR")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActorEntity {
+public class AuthorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -31,5 +31,11 @@ public class ActorEntity {
             cascade = CascadeType.ALL,
             mappedBy = "actors"
     )
-    private List<MovieEntity> movies = new ArrayList<>();
+    private List<MovieEntity> actorMovies = new ArrayList<>();
+
+    @ManyToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "directors"
+    )
+    private List<MovieEntity> directorMovies = new ArrayList<>();
 }

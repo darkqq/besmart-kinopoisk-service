@@ -11,7 +11,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CommentDetailsTO {
     private UUID commentId;
-    private String ownerUsername;
+    private UUID movieID;
     private UUID ownerId;
+    private String ownerUsername;
     private String text;
 }

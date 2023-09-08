@@ -72,8 +72,8 @@ public class MovieController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetMoviePageResponseTO> getMoviePage(@RequestParam(name = "movie") String movieTitle) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<GetMoviePageResponseTO> getMoviePage(@RequestParam(name = "movie") String movieTitle) throws ServiceException {
+        return ResponseEntity.ok(movieService.getMoviePage(movieTitle));
     }
 
     //moder, admin
