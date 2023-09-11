@@ -29,8 +29,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseTO registerUser(UserRegisterRequestTO request) throws ServiceException {
+        System.out.println(request.getUsername());
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new ServiceException("Такой пользователь уже сущесвует");
+            throw new ServiceException("Такой пользователь уже существует");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {

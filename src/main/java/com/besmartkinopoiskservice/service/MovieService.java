@@ -10,5 +10,5 @@ public interface MovieService {
 
     GetMoviePageResponseTO getMoviePage(String title) throws ServiceException;
 
-    GetMoviePageResponseTO findMoviesPages(String title, int year) throws ServiceException;
+    GetMoviePageResponseTO findMoviesPages(String title, Integer year) throws ServiceException;
 }

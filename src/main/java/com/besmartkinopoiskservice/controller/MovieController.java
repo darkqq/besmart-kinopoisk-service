@@ -77,7 +77,7 @@ public class MovieController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<GetMoviePageResponseTO> getMoviePageList(@RequestParam(name = "movie") String movieTitle, @RequestParam(name = "year") int year) throws ServiceException {
+    public ResponseEntity<GetMoviePageResponseTO> getMoviePageList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year) throws ServiceException {
         return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year));
     }
 

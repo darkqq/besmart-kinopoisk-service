@@ -4,7 +4,6 @@ import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
-import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
@@ -14,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +47,7 @@ public class MovieServiceImpl implements MovieService {
     public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException {
         Optional<MovieEntity> movie = movieRepository.findAllByTitle(title);
         if (movie == null) {
-            throw new ServiceException("Фильма с таким названием не существует");
+            throw new ServiceException("Фильмов с таким названием не существует");
         }
         List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
         movieDetails.add(MoviePageMapper.toDto(movie.get()));
@@ -58,12 +55,28 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMoviePageResponseTO findMoviesPages(String title, int year) throws ServiceException {
-        LocalDate localYear = LocalDate.of(year, 1, 1);
-        List<MovieEntity> movie = movieRepository.findAllWhereYearMore(localYear);
-        if (movie == null) {
-            throw new ServiceException("Фильма с таким названием не существует");
+    public GetMoviePageResponseTO findMoviesPages(String title, Integer year) throws ServiceException {
+        List<MovieEntity> movie = new ArrayList<>();
+        if (year != null){
+            movie = movieRepository.findAllWhereYearMore(LocalDate.of(year, 1, 1));
         }
+        if (title != null){
+            movie.addAll(movieRepository.findAllWhereTitleLike(title));
+        }
+        if (movie.size() == 0 && title == null && year != null) {
+            throw new ServiceException("Фильмов вышедших в этот год или позднее не существует");
+        }
+        else if (movie.size() == 0 && year == null && title != null) {
+            throw new ServiceException("Фильмов с таким названием не существует");
+        }
+        else if (movie.size() == 0 && year != null && title != null){
+            throw new ServiceException("Фильмов с такими параметрами не существует");
+        }
+
+        Set<MovieEntity> movieSet = new HashSet<>(movie);
+        movie.clear();
+        movie.addAll(movieSet);
+
         List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
         for (int i = 0; i < movie.size(); i++){
             movieDetails.add(MoviePageMapper.toDto(movie.get(i)));
