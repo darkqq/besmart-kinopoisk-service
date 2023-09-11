@@ -4,6 +4,8 @@ import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
+import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageResponseTO;
@@ -12,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,17 +40,34 @@ public class MovieServiceImpl implements MovieService {
         movie.setTitle(request.getTitle());
         movie.setDescription(request.getDescription());
         movie.setPremiere(premiere);
+        movie.setPremiereYear(Integer.parseInt(premiereDatePartsString[2]));
         movie.setBoxOffice(request.getBoxOffice());
         movieRepository.save(movie);
         return new EmptyResponseTO();
     }
 
     @Override
-    public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException{
-        MovieEntity movie = movieRepository.findByTitle(title);
-        if (movie == null){
+    public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException {
+        Optional<MovieEntity> movie = movieRepository.findAllByTitle(title);
+        if (movie == null) {
             throw new ServiceException("Фильма с таким названием не существует");
         }
-        return new GetMoviePageResponseTO(MoviePageMapper.toDto(movie));
+        List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
+        movieDetails.add(MoviePageMapper.toDto(movie.get()));
+        return new GetMoviePageResponseTO(movieDetails);
+    }
+
+    @Override
+    public GetMoviePageResponseTO findMoviesPages(String title, int year) throws ServiceException {
+        LocalDate localYear = LocalDate.of(year, 1, 1);
+        List<MovieEntity> movie = movieRepository.findAllWhereYearMore(localYear);
+        if (movie == null) {
+            throw new ServiceException("Фильма с таким названием не существует");
+        }
+        List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
+        for (int i = 0; i < movie.size(); i++){
+            movieDetails.add(MoviePageMapper.toDto(movie.get(i)));
+        }
+            return new GetMoviePageResponseTO(movieDetails);
     }
 }

@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class GetMoviePageResponseTO {
-    private MoviePageDetailsTO movieDetails;
+    private List<MoviePageDetailsTO> movieDetails;
 }

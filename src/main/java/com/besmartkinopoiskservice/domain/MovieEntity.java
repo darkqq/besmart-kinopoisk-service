@@ -27,6 +27,7 @@ public class MovieEntity {
     private String description;
     private double boxOffice;
     private LocalDate premiere;
+    private int premiereYear;
 
     @OneToMany(
             cascade = CascadeType.ALL,
