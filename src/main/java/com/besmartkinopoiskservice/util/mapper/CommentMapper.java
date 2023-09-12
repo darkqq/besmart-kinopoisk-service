@@ -4,7 +4,7 @@ import com.besmartkinopoiskservice.domain.CommentEntity;
 import com.besmartkinopoiskservice.to.domain.CommentDetailsTO;
 
 public class CommentMapper {
-    public CommentDetailsTO toDto(CommentEntity entity){
+    public static CommentDetailsTO toDto(CommentEntity entity){
         return new CommentDetailsTO(
                 entity.getId(),
                 entity.getMovie().getId(),

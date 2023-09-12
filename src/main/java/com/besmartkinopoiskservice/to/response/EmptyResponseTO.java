@@ -1,10 +1,10 @@
 package com.besmartkinopoiskservice.to.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.NoArgsConstructor;
 
-@Data
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class EmptyResponseTO {
 
 }

@@ -4,7 +4,7 @@ import com.besmartkinopoiskservice.domain.RatingEntity;
 
 import java.util.List;
 
-public class GetAverageRating {
+public class RatingCalculatorUtil {
     public double getAverageRating(List<RatingEntity> ratings){
         double averageRating = 0;
         for (int i = 0; i < ratings.size(); i++){

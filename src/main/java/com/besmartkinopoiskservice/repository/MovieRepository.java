@@ -16,9 +16,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
 
     Optional<MovieEntity> findAllByTitle(String title);
 
-    @Query(value = "SELECT * FROM MOVIE WHERE premiere >= ?1", nativeQuery = true)
-    List<MovieEntity> findAllWhereYearMore(LocalDate year);
+    List<MovieEntity> findAllByPremiereYearAfter(int year);
 
-    @Query(value = "SELECT * FROM MOVIE WHERE title LIKE ?1%", nativeQuery = true)
-    List<MovieEntity> findAllWhereTitleLike(String title);
+    List<MovieEntity> findAllByTitleContaining(String title);
 }

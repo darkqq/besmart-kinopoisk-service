@@ -22,13 +22,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public EmptyResponseTO addMovieToDatabase(CreateMoviePageRequestTO request) throws ServiceException {
-        String[] premiereDatePartsString = request.getPremiere().split("\\.");
-        LocalDate premiere = LocalDate.of(
-                Integer.parseInt(premiereDatePartsString[2]),
-                Integer.parseInt(premiereDatePartsString[1]),
-                Integer.parseInt(premiereDatePartsString[0])
-        );
-
+        LocalDate premiere = LocalDate.parse(request.getPremiere());
         if (movieRepository.existsByTitle(request.getTitle()) && movieRepository.existsByPremiere(premiere)) {
             throw new ServiceException("Такой фильм уже существует");
         }
@@ -37,7 +31,7 @@ public class MovieServiceImpl implements MovieService {
         movie.setTitle(request.getTitle());
         movie.setDescription(request.getDescription());
         movie.setPremiere(premiere);
-        movie.setPremiereYear(Integer.parseInt(premiereDatePartsString[2]));
+        movie.setPremiereYear(premiere.getYear());
         movie.setBoxOffice(request.getBoxOffice());
         movieRepository.save(movie);
         return new EmptyResponseTO();
@@ -57,15 +51,14 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException {
         List<MovieEntity> movie = new ArrayList<>();
-        if (year == null && title == null){
+        if (year == null && title == null) {
             movie = movieRepository.findAll();
-        }
-        else {
+        } else {
             if (year != null) {
-                movie = movieRepository.findAllWhereYearMore(LocalDate.of(year, 1, 1));
+                movie = movieRepository.findAllByPremiereYearAfter(year);
             }
             if (title != null) {
-                movie.addAll(movieRepository.findAllWhereTitleLike(title));
+                movie.addAll(movieRepository.findAllByTitleContaining(title));
             }
             if (movie.size() == 0 && title == null && year != null) {
                 throw new ServiceException("Фильмов вышедших в этот год или позднее не существует");
@@ -82,16 +75,14 @@ public class MovieServiceImpl implements MovieService {
 
         if (sortType == "year") {
             Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
-        }
-        else if (sortType == "rating")  {
+        } else if (sortType == "rating") {
             Collections.sort(movie, Comparator.comparingDouble(MovieEntity::getCurrentRating));
-        }
-        else {
+        } else {
             Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
         }
 
         List<MovieEntity> moviesPages = new ArrayList<>();
-        for (int i = 0; i < pageSize && i < movie.size(); i++){
+        for (int i = 0; i < pageSize && i < movie.size(); i++) {
             moviesPages.add(movie.get(i));
         }
 
