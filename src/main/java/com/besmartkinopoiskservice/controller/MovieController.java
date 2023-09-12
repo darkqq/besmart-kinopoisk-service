@@ -71,7 +71,7 @@ public class MovieController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("")
+    @GetMapping("/list")
     public ResponseEntity<GetMoviePageResponseTO> getMovies(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "year") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) throws ServiceException {
         return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year, sortType, pageSize, offset));
     }
