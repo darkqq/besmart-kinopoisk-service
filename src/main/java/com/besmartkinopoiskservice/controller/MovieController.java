@@ -72,13 +72,8 @@ public class MovieController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetMoviePageResponseTO> getMoviePage(@RequestParam(name = "movie") String movieTitle) throws ServiceException {
-        return ResponseEntity.ok(movieService.getMoviePage(movieTitle));
-    }
-
-    @GetMapping("/find")
-    public ResponseEntity<GetMoviePageResponseTO> getMoviePageList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year) throws ServiceException {
-        return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year));
+    public ResponseEntity<GetMoviePageResponseTO> getMoviePageList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "year") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) throws ServiceException {
+        return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year, sortType, pageSize, offset));
     }
 
     //moder, admin

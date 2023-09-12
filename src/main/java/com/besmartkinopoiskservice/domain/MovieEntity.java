@@ -35,6 +35,8 @@ public class MovieEntity {
     )
     private List<RatingEntity> rating = new ArrayList<>();
 
+    private double currentRating;
+
     @OneToMany(
             cascade = CascadeType.ALL,
             mappedBy = "movie"

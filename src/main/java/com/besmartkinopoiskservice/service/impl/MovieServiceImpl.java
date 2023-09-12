@@ -55,32 +55,50 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMoviePageResponseTO findMoviesPages(String title, Integer year) throws ServiceException {
+    public GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException {
         List<MovieEntity> movie = new ArrayList<>();
-        if (year != null){
-            movie = movieRepository.findAllWhereYearMore(LocalDate.of(year, 1, 1));
+        if (year == null && title == null){
+            movie = movieRepository.findAll();
         }
-        if (title != null){
-            movie.addAll(movieRepository.findAllWhereTitleLike(title));
-        }
-        if (movie.size() == 0 && title == null && year != null) {
-            throw new ServiceException("Фильмов вышедших в этот год или позднее не существует");
-        }
-        else if (movie.size() == 0 && year == null && title != null) {
-            throw new ServiceException("Фильмов с таким названием не существует");
-        }
-        else if (movie.size() == 0 && year != null && title != null){
-            throw new ServiceException("Фильмов с такими параметрами не существует");
+        else {
+            if (year != null) {
+                movie = movieRepository.findAllWhereYearMore(LocalDate.of(year, 1, 1));
+            }
+            if (title != null) {
+                movie.addAll(movieRepository.findAllWhereTitleLike(title));
+            }
+            if (movie.size() == 0 && title == null && year != null) {
+                throw new ServiceException("Фильмов вышедших в этот год или позднее не существует");
+            } else if (movie.size() == 0 && year == null && title != null) {
+                throw new ServiceException("Фильмов с таким названием не существует");
+            } else if (movie.size() == 0 && year != null && title != null) {
+                throw new ServiceException("Фильмов с такими параметрами не существует");
+            }
+
+            Set<MovieEntity> movieSet = new HashSet<>(movie);
+            movie.clear();
+            movie.addAll(movieSet);
         }
 
-        Set<MovieEntity> movieSet = new HashSet<>(movie);
-        movie.clear();
-        movie.addAll(movieSet);
+        if (sortType == "year") {
+            Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
+        }
+        else if (sortType == "rating")  {
+            Collections.sort(movie, Comparator.comparingDouble(MovieEntity::getCurrentRating));
+        }
+        else {
+            Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
+        }
+
+        List<MovieEntity> moviesPages = new ArrayList<>();
+        for (int i = 0; i < pageSize && i < movie.size(); i++){
+            moviesPages.add(movie.get(i));
+        }
 
         List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
-        for (int i = 0; i < movie.size(); i++){
-            movieDetails.add(MoviePageMapper.toDto(movie.get(i)));
+        for (int i = 0; i < moviesPages.size(); i++) {
+            movieDetails.add(MoviePageMapper.toDto(moviesPages.get(i)));
         }
-            return new GetMoviePageResponseTO(movieDetails);
+        return new GetMoviePageResponseTO(movieDetails);
     }
 }
