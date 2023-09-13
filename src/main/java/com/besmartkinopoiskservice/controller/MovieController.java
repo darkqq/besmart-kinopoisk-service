@@ -80,14 +80,19 @@ public class MovieController {
         return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year, sortType, pageSize, offset));
     }
 
+    @GetMapping("/image")
+    public ResponseEntity<byte[]> getMovieImage(@RequestParam(name = "movieid") UUID movieId) throws ServiceException, IOException {
+        return movieService.getMovieImage(movieId);
+    }
+
     //moder, admin
     @GetMapping("/info")
-    public ResponseEntity<GetMovieResponseTO> getMovieInfo(@RequestParam(name = "movie") String movieTitle) {
+    public ResponseEntity<GetMovieResponseTO> getMovieInfo(@RequestParam(name = "movie") String movieTitle, @RequestParam(name = "sort", required = false, defaultValue = "time") String sortType, @RequestParam(name = "listsize", required = false, defaultValue = "10") int commentsListSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/commets")
-    public ResponseEntity<GetCommentsResponseTO> getMovieComments(@RequestParam(name = "movie") String movieTitle) {
+    @GetMapping("/comments")
+    public ResponseEntity<GetCommentsResponseTO> getMovieComments(@RequestParam(name = "movieid") UUID movieId) {
         return ResponseEntity.ok(null);
     }
 }

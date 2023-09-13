@@ -4,6 +4,7 @@ import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageResponseTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,4 +18,6 @@ public interface MovieService {
     GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException, IOException;
 
     EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws IOException;
+
+    ResponseEntity<byte[]> getMovieImage(UUID movieId) throws IOException, ServiceException;
 }

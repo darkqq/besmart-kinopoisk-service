@@ -11,6 +11,10 @@ import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MoviePageMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -99,12 +103,39 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws IOException {
-        UUID imageId = UUID.randomUUID();
-        imageRepository.saveImage(image, imageId);
         Optional<MovieEntity> movie = movieRepository.findById(movieId);
-        movie.get().setImage(imageId);
+        if (movie.get().getImage() != null)
+        {
+            imageRepository.saveImage(image, movie.get().getImage());
+        }
+        else {
+            UUID imageId = UUID.randomUUID();
+            imageRepository.saveImage(image, UUID.randomUUID());
+            movie.get().setImage(imageId);
+        }
         movieRepository.save(movie.get());
 
         return new EmptyResponseTO();
+    }
+
+    @Override
+    public ResponseEntity<byte[]> getMovieImage(UUID movieId) throws IOException, ServiceException {
+        Optional<MovieEntity> movie = movieRepository.findById(movieId);
+        if (!movie.isPresent()){
+            throw new ServiceException("Фильма с таким id не существует");
+        }
+        byte[] imageBytes;
+        if (movie.get().getImage() != null)
+        {
+            imageBytes = imageRepository.getImage(movie.get().getImage());
+        }
+        else {
+            throw new ServiceException("Постера для запрашиваемого фильма не существует");
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(imageBytes.length);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }

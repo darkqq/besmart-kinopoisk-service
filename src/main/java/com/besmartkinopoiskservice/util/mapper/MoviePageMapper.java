@@ -9,7 +9,6 @@ import java.util.List;
 
 public class MoviePageMapper {
     public static MoviePageDetailsTO toDto (MovieEntity entity){
-        List<CommentDetailsTO> commentDetails = entity.getComments().stream().map(CommentMapper::toDto).toList();
 
         return new MoviePageDetailsTO(
                 entity.getImage(),
@@ -17,8 +16,7 @@ public class MoviePageMapper {
                 new RatingCalculatorUtil().getAverageRating(entity.getRating()),
                 entity.getDescription(),
                 entity.getBoxOffice(),
-                entity.getPremiere(),
-                commentDetails
+                entity.getPremiere()
         );
     }
 }

@@ -18,5 +18,4 @@ public class MoviePageDetailsTO {
     private String description;
     private double boxOffice;
     private LocalDate premiere;
-    private List<CommentDetailsTO> comments;
 }
