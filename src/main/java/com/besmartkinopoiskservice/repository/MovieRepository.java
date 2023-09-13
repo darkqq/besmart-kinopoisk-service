@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
@@ -15,6 +16,8 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     boolean existsByPremiere(LocalDate premiere);
 
     Optional<MovieEntity> findAllByTitle(String title);
+
+    Optional<MovieEntity> findById(UUID id);
 
     List<MovieEntity> findAllByPremiereYearAfter(int year);
 

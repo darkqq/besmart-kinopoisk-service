@@ -3,6 +3,7 @@ package com.besmartkinopoiskservice.service.impl;
 import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.MovieRepository;
+import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
@@ -11,7 +12,9 @@ import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageRespons
 import com.besmartkinopoiskservice.util.mapper.MoviePageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,6 +22,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
+    private static final ImageRepository imageRepository = new ImageRepository();
 
     @Override
     public EmptyResponseTO addMovieToDatabase(CreateMoviePageRequestTO request) throws ServiceException {
@@ -38,7 +42,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException {
+    public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException, IOException {
         Optional<MovieEntity> movie = movieRepository.findAllByTitle(title);
         if (movie == null) {
             throw new ServiceException("Фильмов с таким названием не существует");
@@ -49,7 +53,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException {
+    public GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException, IOException {
         List<MovieEntity> movie = new ArrayList<>();
         if (year == null && title == null) {
             movie = movieRepository.findAll();
@@ -91,5 +95,16 @@ public class MovieServiceImpl implements MovieService {
             movieDetails.add(MoviePageMapper.toDto(moviesPages.get(i)));
         }
         return new GetMoviePageResponseTO(movieDetails);
+    }
+
+    @Override
+    public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws IOException {
+        UUID imageId = UUID.randomUUID();
+        imageRepository.saveImage(image, imageId);
+        Optional<MovieEntity> movie = movieRepository.findById(movieId);
+        movie.get().setImage(imageId);
+        movieRepository.save(movie.get());
+
+        return new EmptyResponseTO();
     }
 }

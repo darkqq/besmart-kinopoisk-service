@@ -10,6 +10,10 @@ import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/movie")
@@ -60,9 +64,9 @@ public class MovieController {
     }
 
     //admin
-    @PutMapping("/update/picture")
-    public ResponseEntity<EmptyResponseTO> updateMoviePicture(@RequestBody UpdateMoviePictureRequestTO request) {
-        return ResponseEntity.ok(null);
+    @PutMapping("/update/image")
+    public ResponseEntity<EmptyResponseTO> updateMovieImage(@RequestParam("movieid") UUID movieId, @RequestParam("image") MultipartFile image) throws IOException {
+        return ResponseEntity.ok(movieService.updateMovieImage(movieId, image));
     }
 
     //admin
@@ -72,7 +76,7 @@ public class MovieController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<GetMoviePageResponseTO> getMovies(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "year") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) throws ServiceException {
+    public ResponseEntity<GetMoviePageResponseTO> getMovies(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "year") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) throws ServiceException, IOException {
         return ResponseEntity.ok(movieService.findMoviesPages(movieTitle, year, sortType, pageSize, offset));
     }
 
