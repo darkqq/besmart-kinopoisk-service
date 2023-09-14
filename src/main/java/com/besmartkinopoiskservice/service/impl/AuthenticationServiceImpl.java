@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
         var user = userRepository.findByUsername(request.getUsername());
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user.get());
         return AuthenticationResponseTO.builder().token(jwtToken).build();
     }
 

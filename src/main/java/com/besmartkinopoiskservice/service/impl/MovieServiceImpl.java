@@ -2,8 +2,9 @@ package com.besmartkinopoiskservice.service.impl;
 
 import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.exception.ServiceException;
-import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.repository.ImageRepository;
+import com.besmartkinopoiskservice.repository.MovieRepository;
+import com.besmartkinopoiskservice.repository.impl.ImageRepositoryImpl;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
@@ -26,7 +27,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
-    private static final ImageRepository imageRepository = new ImageRepository();
+    private final ImageRepository imageRepository;
 
     @Override
     public EmptyResponseTO addMovieToDatabase(CreateMoviePageRequestTO request) throws ServiceException {
@@ -110,7 +111,7 @@ public class MovieServiceImpl implements MovieService {
         }
         else {
             UUID imageId = UUID.randomUUID();
-            imageRepository.saveImage(image, UUID.randomUUID());
+            imageRepository.saveImage(image, imageId);
             movie.get().setImage(imageId);
         }
         movieRepository.save(movie.get());

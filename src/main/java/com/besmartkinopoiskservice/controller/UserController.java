@@ -26,23 +26,6 @@ public class UserController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/comments")
-    public ResponseEntity<GetCommentsResponseTO> getUserComments(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
-    }
-
-    //owner, moderator, admin
-    @PutMapping("/comments/update")
-    public ResponseEntity<EmptyResponseTO> updateUserComments(@RequestBody UpdateCommentRequestTO request) {
-        return ResponseEntity.ok(null);
-    }
-
-    //owner, moderator, admin
-    @PutMapping("/comments/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserComments(@RequestBody DeleteCommentRequestTO request) {
-        return ResponseEntity.ok(null);
-    }
-
     @GetMapping("/favorites")
     public ResponseEntity<GetMoviesListResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);

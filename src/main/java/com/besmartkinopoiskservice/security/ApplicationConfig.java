@@ -1,6 +1,8 @@
 package com.besmartkinopoiskservice.security;
 
+import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.UserRepository;
+import com.besmartkinopoiskservice.repository.impl.ImageRepositoryImpl;
 import com.besmartkinopoiskservice.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +22,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
     @Autowired
     private final UserRepository userRepository;
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsService(){
+        return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-                return userRepository.findByUsername(username);
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findByUsername(username).get();
             }
         };
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -39,12 +42,17 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ImageRepository imageRepository() {
+        return new ImageRepositoryImpl();
     }
 }
