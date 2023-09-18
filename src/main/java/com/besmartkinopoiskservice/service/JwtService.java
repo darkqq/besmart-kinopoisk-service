@@ -1,6 +1,7 @@
 package com.besmartkinopoiskservice.service;
 
 import com.besmartkinopoiskservice.domain.UserEntity;
+import com.besmartkinopoiskservice.exception.AuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,11 +20,11 @@ import java.util.function.Function;
 public class JwtService {
     private static final String SECRET_KEY = "WYU2bEVbF1LTKxuFO9sh/YvRLBOTwUkxrtMknNrtr2Gl4pDs5h+mV09SVUvK9oRw";
 
-    public String extractUsername(String token){
+    public String extractUsername(String token) throws AuthenticationException {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimResolver) throws AuthenticationException {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
@@ -42,24 +43,29 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails){
+    public boolean isTokenValid(String token, UserDetails userDetails) throws AuthenticationException {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) throws AuthenticationException {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token){
+    private Date extractExpiration(String token) throws AuthenticationException {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token){
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
-                .build().parseClaimsJws(token)
-                .getBody();
+    private Claims extractAllClaims(String token) throws AuthenticationException {
+        try{
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build().parseClaimsJws(token)
+                    .getBody();
+        }
+        catch (Exception e){
+            throw new AuthenticationException(e.getMessage());
+        }
     }
 
     private Key getSignKey(){
