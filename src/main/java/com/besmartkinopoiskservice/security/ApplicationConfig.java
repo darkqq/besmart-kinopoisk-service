@@ -5,7 +5,6 @@ import com.besmartkinopoiskservice.repository.UserRepository;
 import com.besmartkinopoiskservice.repository.impl.ImageRepositoryImpl;
 import com.besmartkinopoiskservice.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,13 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    @Autowired
     private final UserRepository userRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
-            @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 return userRepository.findByUsername(username).get();
             }
@@ -49,10 +46,5 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public ImageRepository imageRepository() {
-        return new ImageRepositoryImpl();
     }
 }

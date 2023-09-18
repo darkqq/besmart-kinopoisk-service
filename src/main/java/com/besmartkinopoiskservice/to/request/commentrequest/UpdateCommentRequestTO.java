@@ -1,4 +1,4 @@
-package com.besmartkinopoiskservice.to.request.userrequest;
+package com.besmartkinopoiskservice.to.request.commentrequest;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

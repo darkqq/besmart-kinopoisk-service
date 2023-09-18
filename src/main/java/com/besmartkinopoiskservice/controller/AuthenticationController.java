@@ -1,5 +1,6 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.AuthenticationException;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.AuthenticationService;
 import com.besmartkinopoiskservice.service.UserService;
@@ -25,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponseTO> loginUser(@RequestBody UserLogInRequestTO request) {
+    public ResponseEntity<AuthenticationResponseTO> loginUser(@RequestBody UserLogInRequestTO request) throws AuthenticationException {
         return ResponseEntity.ok(authService.userLogIn(request));
     }
 }

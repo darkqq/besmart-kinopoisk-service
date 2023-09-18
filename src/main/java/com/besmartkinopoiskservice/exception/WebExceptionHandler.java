@@ -1,8 +1,6 @@
 package com.besmartkinopoiskservice.exception;
 
-import com.besmartkinopoiskservice.to.response.ExceptionResponseTO;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
+import com.besmartkinopoiskservice.to.response.error.ExceptionResponseTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,9 +14,10 @@ public class WebExceptionHandler {
         return new ExceptionResponseTO(e.getMessage());
     }
 
-    @ExceptionHandler(JwtException.class)
+    @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponseTO handlerException(JwtException e) {
+    public ExceptionResponseTO handlerException(AuthenticationException e) {
         return new ExceptionResponseTO(e.getMessage());
     }
+
 }

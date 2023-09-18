@@ -1,6 +1,5 @@
 package com.besmartkinopoiskservice.controller;
 
-import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.userrequest.*;
 import com.besmartkinopoiskservice.to.response.*;
@@ -9,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -16,13 +17,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<GetUserPageResponseTO> getUserPage(@RequestParam(name = "username") String username) {
+    public ResponseEntity<GetUserResponseTO> getUserPage(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 
     //owner, admin
     @GetMapping("/info")
-    public ResponseEntity<GetUserResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
+    public ResponseEntity<GetUserShortInfoResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 
@@ -39,7 +40,7 @@ public class UserController {
 
     //owner, admin
     @PutMapping("/favorite/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestBody DeleteFavoriteRequestTO request) {
+    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "movieid") UUID movieId) {
         return ResponseEntity.ok(null);
     }
 }

@@ -1,15 +1,15 @@
 package com.besmartkinopoiskservice.service.impl;
 
 import com.besmartkinopoiskservice.domain.MovieEntity;
+import com.besmartkinopoiskservice.enumeration.SortType;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.MovieRepository;
-import com.besmartkinopoiskservice.repository.impl.ImageRepositoryImpl;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
-import com.besmartkinopoiskservice.to.request.movierequest.CreateMoviePageRequestTO;
+import com.besmartkinopoiskservice.to.request.movierequest.CreateMovieRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
-import com.besmartkinopoiskservice.to.response.movieresposes.GetMoviePageResponseTO;
+import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MoviePageMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +30,7 @@ public class MovieServiceImpl implements MovieService {
     private final ImageRepository imageRepository;
 
     @Override
-    public EmptyResponseTO addMovieToDatabase(CreateMoviePageRequestTO request) throws ServiceException {
+    public EmptyResponseTO addMovieToDatabase(CreateMovieRequestTO request) throws ServiceException {
         LocalDate premiere = LocalDate.parse(request.getPremiere());
         if (movieRepository.existsByTitle(request.getTitle()) && movieRepository.existsByPremiere(premiere)) {
             throw new ServiceException("Такой фильм уже существует");
@@ -47,34 +47,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMoviePageResponseTO getMoviePage(String title) throws ServiceException, IOException {
+    public GetMovieResponseTO getMovie(String title) throws ServiceException, IOException {
         Optional<MovieEntity> movie = movieRepository.findAllByTitle(title);
         if (movie == null) {
             throw new ServiceException("Фильмов с таким названием не существует");
         }
         List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
         movieDetails.add(MoviePageMapper.toDto(movie.get()));
-        return new GetMoviePageResponseTO(movieDetails);
+        return new GetMovieResponseTO(movieDetails);
     }
 
     @Override
-    public GetMoviePageResponseTO findMoviesPages(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException, IOException {
+    public GetMovieResponseTO findMovies(String title, Integer year, String sortType, int pageSize, int offset) {
         List<MovieEntity> movie = new ArrayList<>();
         if (year == null && title == null) {
             movie = movieRepository.findAll();
         } else {
             if (year != null) {
-                movie = movieRepository.findAllByPremiereYearAfter(year);
+                movie = movieRepository.findAllByPremiereYearAfter(year - 1);
             }
             if (title != null) {
                 movie.addAll(movieRepository.findAllByTitleContaining(title));
-            }
-            if (movie.size() == 0 && title == null && year != null) {
-                throw new ServiceException("Фильмов вышедших в этот год или позднее не существует");
-            } else if (movie.size() == 0 && year == null && title != null) {
-                throw new ServiceException("Фильмов с таким названием не существует");
-            } else if (movie.size() == 0 && year != null && title != null) {
-                throw new ServiceException("Фильмов с такими параметрами не существует");
             }
 
             Set<MovieEntity> movieSet = new HashSet<>(movie);
@@ -82,9 +75,9 @@ public class MovieServiceImpl implements MovieService {
             movie.addAll(movieSet);
         }
 
-        if (sortType == "year") {
+        if (sortType == SortType.TIME.toString()) {
             Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
-        } else if (sortType == "rating") {
+        } else if (sortType == SortType.RATING.toString()) {
             Collections.sort(movie, Comparator.comparingDouble(MovieEntity::getCurrentRating));
         } else {
             Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
@@ -99,19 +92,29 @@ public class MovieServiceImpl implements MovieService {
         for (int i = 0; i < moviesPages.size(); i++) {
             movieDetails.add(MoviePageMapper.toDto(moviesPages.get(i)));
         }
-        return new GetMoviePageResponseTO(movieDetails);
+        return new GetMovieResponseTO(movieDetails);
     }
 
     @Override
-    public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws IOException {
+    public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws ServiceException {
         Optional<MovieEntity> movie = movieRepository.findById(movieId);
         if (movie.get().getImage() != null)
         {
-            imageRepository.saveImage(image, movie.get().getImage());
+            try {
+                imageRepository.saveImage(image, movie.get().getImage());
+            }
+            catch (IOException e){
+                throw new ServiceException("Ошибка при обновлении постера");
+            }
         }
         else {
             UUID imageId = UUID.randomUUID();
-            imageRepository.saveImage(image, imageId);
+            try {
+                imageRepository.saveImage(image, imageId);
+            }
+            catch (IOException e){
+                throw new ServiceException("Ошибка при сохранении постера");
+            }
             movie.get().setImage(imageId);
         }
         movieRepository.save(movie.get());
@@ -120,7 +123,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public ResponseEntity<byte[]> getMovieImage(UUID movieId) throws IOException, ServiceException {
+    public ResponseEntity<byte[]> getMovieImage(UUID movieId) throws ServiceException {
         Optional<MovieEntity> movie = movieRepository.findById(movieId);
         if (!movie.isPresent()){
             throw new ServiceException("Фильма с таким id не существует");
@@ -128,7 +131,12 @@ public class MovieServiceImpl implements MovieService {
         byte[] imageBytes;
         if (movie.get().getImage() != null)
         {
-            imageBytes = imageRepository.getImage(movie.get().getImage());
+            try {
+                imageBytes = imageRepository.getImage(movie.get().getImage());
+            }
+            catch (IOException e){
+                throw new ServiceException("Проблема при получении постера фильма");
+            }
         }
         else {
             throw new ServiceException("Постера для запрашиваемого фильма не существует");

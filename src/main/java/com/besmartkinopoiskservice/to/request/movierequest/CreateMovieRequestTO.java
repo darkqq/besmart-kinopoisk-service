@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class CreateMoviePageRequestTO {
+public class CreateMovieRequestTO {
     private String title;
     private String description;
     private double boxOffice;

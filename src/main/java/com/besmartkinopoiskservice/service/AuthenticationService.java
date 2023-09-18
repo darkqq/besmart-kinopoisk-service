@@ -1,5 +1,6 @@
 package com.besmartkinopoiskservice.service;
 
+import com.besmartkinopoiskservice.exception.AuthenticationException;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.to.request.userrequest.UserLogInRequestTO;
 import com.besmartkinopoiskservice.to.request.userrequest.UserRegisterRequestTO;
@@ -8,5 +9,5 @@ import com.besmartkinopoiskservice.to.response.userresponses.AuthenticationRespo
 public interface AuthenticationService {
     AuthenticationResponseTO registerUser(UserRegisterRequestTO request) throws ServiceException;
 
-    AuthenticationResponseTO userLogIn(UserLogInRequestTO request);
+    AuthenticationResponseTO userLogIn(UserLogInRequestTO request) throws AuthenticationException;
 }

@@ -2,6 +2,7 @@ package com.besmartkinopoiskservice.service.impl;
 
 import com.besmartkinopoiskservice.domain.UserEntity;
 import com.besmartkinopoiskservice.enumeration.Role;
+import com.besmartkinopoiskservice.exception.AuthenticationException;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.UserRepository;
 import com.besmartkinopoiskservice.service.AuthenticationService;
@@ -14,10 +15,12 @@ import com.besmartkinopoiskservice.util.ValidationUserCredentials;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,14 +59,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponseTO userLogIn(UserLogInRequestTO request){
+    public AuthenticationResponseTO userLogIn(UserLogInRequestTO request) throws AuthenticationException {
+        Optional<UserEntity> user = userRepository.findByUsername(request.getUsername());
+        if (!user.isPresent()){
+            throw new AuthenticationException("Пользователя с таким именем не существует");
+        }
+        else if (!BCrypt.checkpw(request.getPassword(), user.get().getPassword())){
+            throw new AuthenticationException("Вы ввели неверный пароль");
+        }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByUsername(request.getUsername());
         var jwtToken = jwtService.generateToken(user.get());
         return AuthenticationResponseTO.builder().token(jwtToken).build();
     }

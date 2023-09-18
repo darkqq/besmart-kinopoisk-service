@@ -1,15 +1,13 @@
 package com.besmartkinopoiskservice.to.response.movieresposes;
 
-import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetMoviePageResponseTO {
-    private List<MoviePageDetailsTO> movieDetails;
+public class GetMovieShortInfoResponseTO {
+    private MovieDetailsTO movieDetails;
 }

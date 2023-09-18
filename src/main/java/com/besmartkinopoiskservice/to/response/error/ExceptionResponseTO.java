@@ -1,14 +1,12 @@
-package com.besmartkinopoiskservice.to.request.movierequest;
+package com.besmartkinopoiskservice.to.response.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetMoviePageRequestTO {
-    private UUID movieID;
+public class ExceptionResponseTO {
+    private String error;
 }

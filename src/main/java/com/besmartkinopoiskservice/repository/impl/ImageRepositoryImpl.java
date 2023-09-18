@@ -1,6 +1,7 @@
 package com.besmartkinopoiskservice.repository.impl;
 
 import com.besmartkinopoiskservice.repository.ImageRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Component
 public class ImageRepositoryImpl implements ImageRepository {
 
     private final String filePath = new File("").getAbsolutePath() + "/src/main/resources/img/";
