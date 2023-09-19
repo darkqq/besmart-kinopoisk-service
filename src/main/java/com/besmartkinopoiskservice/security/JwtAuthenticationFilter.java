@@ -1,6 +1,7 @@
 package com.besmartkinopoiskservice.security;
 
 import com.besmartkinopoiskservice.exception.AuthenticationException;
+import com.besmartkinopoiskservice.exception.WebExceptionHandler;
 import com.besmartkinopoiskservice.service.JwtService;
 import com.besmartkinopoiskservice.service.UserDetailsService;
 import com.besmartkinopoiskservice.to.response.error.AuthErrorResponseTO;
@@ -28,6 +29,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    private final WebExceptionHandler handler;
+
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
@@ -44,10 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(jwt);
         } catch (AuthenticationException e) {
-            AuthErrorResponseTO errorResponse = new AuthErrorResponseTO();
-
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            response.getWriter().write(convertObjectToJson(errorResponse));
+            handler.handlerException(e, response);
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             } catch (AuthenticationException e) {
-                throw new RuntimeException(e);
+                handler.handlerException(e, response);
             }
         }
         filterChain.doFilter(request, response);
