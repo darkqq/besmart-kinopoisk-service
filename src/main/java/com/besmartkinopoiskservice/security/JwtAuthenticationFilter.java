@@ -1,14 +1,13 @@
 package com.besmartkinopoiskservice.security;
 
 import com.besmartkinopoiskservice.exception.AuthenticationException;
-import com.besmartkinopoiskservice.exception.ServiceException;
-import com.besmartkinopoiskservice.exception.WebExceptionHandler;
 import com.besmartkinopoiskservice.service.JwtService;
 import com.besmartkinopoiskservice.service.UserDetailsService;
+import com.besmartkinopoiskservice.to.response.error.ExceptionResponseTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 response.setContentType("application/json");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().println(convertObjectToJson(e.getMessage()));
+                response.getWriter().print(new Gson().toJson(new ExceptionResponseTO(e.getMessage())));
                 return;
             }
             return;
@@ -52,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (AuthenticationException e) {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println(convertObjectToJson(e.getMessage()));
+            response.getWriter().print(new Gson().toJson(new ExceptionResponseTO(e.getMessage())));
             return;
         }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -70,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (AuthenticationException e) {
                 response.setContentType("application/json");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().println(convertObjectToJson(e.getMessage()));
+                response.getWriter().print(new Gson().toJson(new ExceptionResponseTO(e.getMessage())));
                 return;
             }
         }
@@ -79,16 +78,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().println(convertObjectToJson(e.getMessage()));
+            response.getWriter().print(new Gson().toJson(new ExceptionResponseTO(e.getMessage())));
             return;
         }
-    }
-
-    private String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
     }
 }
