@@ -6,6 +6,7 @@ import com.besmartkinopoiskservice.service.AuthenticationService;
 import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.userrequest.UserLogInRequestTO;
 import com.besmartkinopoiskservice.to.request.userrequest.UserRegisterRequestTO;
+import com.besmartkinopoiskservice.to.response.error.ExceptionResponseTO;
 import com.besmartkinopoiskservice.to.response.userresponses.AuthenticationResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
