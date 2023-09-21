@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/movie")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/movie/add")).hasAuthority(Role.ADMIN.toString())
+                        .requestMatchers(new AntPathRequestMatcher("/movie/update/image")).hasAuthority(Role.ADMIN.toString())
                         .requestMatchers(new AntPathRequestMatcher("/movie/*")).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

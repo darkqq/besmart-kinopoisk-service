@@ -2,8 +2,8 @@ package com.besmartkinopoiskservice.controller;
 
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.CommentService;
-import com.besmartkinopoiskservice.to.request.commentrequest.CreateCommentRequestTO;
-import com.besmartkinopoiskservice.to.request.commentrequest.UpdateCommentRequestTO;
+import com.besmartkinopoiskservice.to.request.comment.CreateCommentRequestTO;
+import com.besmartkinopoiskservice.to.request.comment.UpdateCommentRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.GetCommentsResponseTO;
 import lombok.RequiredArgsConstructor;

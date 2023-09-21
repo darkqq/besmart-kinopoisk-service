@@ -1,21 +1,15 @@
-package com.besmartkinopoiskservice.to.domain;
+package com.besmartkinopoiskservice.to.request.movie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.UUID;
-
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class MovieDetailsTO {
-    private UUID id;
-    private UUID image;
+public class CreateMovieRequestTO {
     private String title;
-    private double rating;
     private String description;
     private double boxOffice;
-    private LocalDate premiere;
+    private String premiere;
 }

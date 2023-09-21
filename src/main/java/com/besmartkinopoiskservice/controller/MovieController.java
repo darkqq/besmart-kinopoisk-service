@@ -2,10 +2,10 @@ package com.besmartkinopoiskservice.controller;
 
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.MovieService;
-import com.besmartkinopoiskservice.to.request.movierequest.*;
+import com.besmartkinopoiskservice.to.request.movie.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
-import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieResponseTO;
-import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieShortInfoResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.GetMovieShortInfoResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -8,6 +8,7 @@ public class MovieMapper {
     public static MovieDetailsTO toDto (MovieEntity entity){
 
         return new MovieDetailsTO(
+                entity.getId(),
                 entity.getImage(),
                 entity.getTitle(),
                 new RatingCalculatorUtil().getAverageRating(entity.getRating()),

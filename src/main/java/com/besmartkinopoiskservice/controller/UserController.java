@@ -1,9 +1,9 @@
 package com.besmartkinopoiskservice.controller;
 
 import com.besmartkinopoiskservice.service.UserService;
-import com.besmartkinopoiskservice.to.request.userrequest.*;
+import com.besmartkinopoiskservice.to.request.user.*;
 import com.besmartkinopoiskservice.to.response.*;
-import com.besmartkinopoiskservice.to.response.userresponses.*;
+import com.besmartkinopoiskservice.to.response.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
