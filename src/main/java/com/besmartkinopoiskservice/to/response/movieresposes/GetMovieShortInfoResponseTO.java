@@ -1,6 +1,6 @@
 package com.besmartkinopoiskservice.to.response.movieresposes;
 
-import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieShortDetailsTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class GetMovieShortInfoResponseTO {
-    private MovieDetailsTO movieDetails;
+    private MovieShortDetailsTO movieDetails;
 }

@@ -6,11 +6,11 @@ import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
-import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import com.besmartkinopoiskservice.to.request.movierequest.CreateMovieRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movieresposes.GetMovieResponseTO;
-import com.besmartkinopoiskservice.util.mapper.MoviePageMapper;
+import com.besmartkinopoiskservice.util.mapper.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,8 +52,8 @@ public class MovieServiceImpl implements MovieService {
         if (movie == null) {
             throw new ServiceException("Фильмов с таким названием не существует");
         }
-        List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
-        movieDetails.add(MoviePageMapper.toDto(movie.get()));
+        List<MovieDetailsTO> movieDetails = new ArrayList<>();
+        movieDetails.add(MovieMapper.toDto(movie.get()));
         return new GetMovieResponseTO(movieDetails);
     }
 
@@ -88,9 +88,9 @@ public class MovieServiceImpl implements MovieService {
             moviesPages.add(movie.get(i));
         }
 
-        List<MoviePageDetailsTO> movieDetails = new ArrayList<>();
+        List<MovieDetailsTO> movieDetails = new ArrayList<>();
         for (int i = 0; i < moviesPages.size(); i++) {
-            movieDetails.add(MoviePageMapper.toDto(moviesPages.get(i)));
+            movieDetails.add(MovieMapper.toDto(moviesPages.get(i)));
         }
         return new GetMovieResponseTO(movieDetails);
     }

@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class MoviePageDetailsTO {
+public class MovieShortDetailsTO {
+    private UUID movieId;
     private UUID image;
     private String title;
     private double rating;

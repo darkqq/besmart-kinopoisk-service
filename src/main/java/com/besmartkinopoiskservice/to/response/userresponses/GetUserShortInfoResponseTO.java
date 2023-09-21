@@ -1,6 +1,6 @@
 package com.besmartkinopoiskservice.to.response.userresponses;
 
-import com.besmartkinopoiskservice.to.domain.UserDetailsTO;
+import com.besmartkinopoiskservice.to.domain.UserShortDetailsTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class GetUserShortInfoResponseTO {
-    private UserDetailsTO userDetails;
+    private UserShortDetailsTO userDetails;
 }

@@ -10,7 +10,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AuteurPageDetailsTO {
+public class AuteurShortDetailsTO {
+    private UUID auteurId;
     private String name;
     private String description;
     private UUID image;

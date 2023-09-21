@@ -1,17 +1,16 @@
 package com.besmartkinopoiskservice.to.domain;
 
+import com.besmartkinopoiskservice.domain.MovieEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class UserDetailsTO {
-    private UUID userId;
     private String username;
-    private String password;
-    private String email;
+    private List<MovieEntity> favoriteMovies;
 }

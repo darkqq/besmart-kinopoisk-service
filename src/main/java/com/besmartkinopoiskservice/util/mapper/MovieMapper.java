@@ -1,16 +1,13 @@
 package com.besmartkinopoiskservice.util.mapper;
 
 import com.besmartkinopoiskservice.domain.MovieEntity;
-import com.besmartkinopoiskservice.to.domain.CommentDetailsTO;
-import com.besmartkinopoiskservice.to.domain.MoviePageDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import com.besmartkinopoiskservice.util.RatingCalculatorUtil;
 
-import java.util.List;
+public class MovieMapper {
+    public static MovieDetailsTO toDto (MovieEntity entity){
 
-public class MoviePageMapper {
-    public static MoviePageDetailsTO toDto (MovieEntity entity){
-
-        return new MoviePageDetailsTO(
+        return new MovieDetailsTO(
                 entity.getImage(),
                 entity.getTitle(),
                 new RatingCalculatorUtil().getAverageRating(entity.getRating()),

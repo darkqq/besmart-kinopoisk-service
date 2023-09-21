@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class AuteurDetailsTO {
-    private UUID auteurId;
     private String name;
     private String description;
     private UUID image;

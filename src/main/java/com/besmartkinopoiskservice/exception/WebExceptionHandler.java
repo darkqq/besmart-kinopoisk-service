@@ -24,10 +24,4 @@ public class WebExceptionHandler {
     public ExceptionResponseTO handlerException(AuthenticationException e) {
         return new ExceptionResponseTO(e.getMessage());
     }
-
-    @ExceptionHandler(ExpiredJwtException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponseTO handlerException(ExpiredJwtException e) {
-        return new ExceptionResponseTO(e.getMessage());
-    }
 }
