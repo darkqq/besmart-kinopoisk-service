@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -18,4 +19,7 @@ public class MovieDetailsTO {
     private String description;
     private double boxOffice;
     private LocalDate premiere;
+
+    private List<AuteurShortDetailsTO> actors;
+    private List<AuteurShortDetailsTO> directors;
 }

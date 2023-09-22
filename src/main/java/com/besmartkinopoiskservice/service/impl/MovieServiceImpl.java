@@ -7,9 +7,11 @@ import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieShortDetailsTO;
 import com.besmartkinopoiskservice.to.request.movie.CreateMovieRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.GetMovieShortDetailsResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -47,18 +49,16 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMovieResponseTO getMovie(String title) throws ServiceException, IOException {
-        Optional<MovieEntity> movie = movieRepository.findAllByTitle(title);
-        if (movie == null) {
-            throw new ServiceException("Фильмов с таким названием не существует");
+    public GetMovieResponseTO findMovie(UUID movieId) throws ServiceException {
+        Optional<MovieEntity> movie = movieRepository.findById(movieId);
+        if (!movie.isPresent()){
+            throw new ServiceException("Фильма с таким id не существует");
         }
-        List<MovieDetailsTO> movieDetails = new ArrayList<>();
-        movieDetails.add(MovieMapper.toDto(movie.get()));
-        return new GetMovieResponseTO(movieDetails);
+        return new GetMovieResponseTO(MovieMapper.toDto(movie.get()));
     }
 
     @Override
-    public GetMovieResponseTO findMovies(String title, Integer year, String sortType, int pageSize, int offset) {
+    public GetMovieShortDetailsResponseTO findMoviesShortDetails(String title, Integer year, String sortType, int pageSize, int offset) {
         List<MovieEntity> movie = new ArrayList<>();
         if (year == null && title == null) {
             movie = movieRepository.findAll();
@@ -83,36 +83,33 @@ public class MovieServiceImpl implements MovieService {
             Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
         }
 
-        List<MovieEntity> moviesPages = new ArrayList<>();
+        List<MovieEntity> movies = new ArrayList<>();
         for (int i = 0; i < pageSize && i < movie.size(); i++) {
-            moviesPages.add(movie.get(i));
+            movies.add(movie.get(i));
         }
 
-        List<MovieDetailsTO> movieDetails = new ArrayList<>();
-        for (int i = 0; i < moviesPages.size(); i++) {
-            movieDetails.add(MovieMapper.toDto(moviesPages.get(i)));
+        List<MovieShortDetailsTO> moviesDetails = new ArrayList<>();
+        for (int i = 0; i < movies.size(); i++) {
+            moviesDetails.add(MovieMapper.toShortDto(movies.get(i)));
         }
-        return new GetMovieResponseTO(movieDetails);
+
+        return new GetMovieShortDetailsResponseTO(moviesDetails);
     }
 
     @Override
     public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws ServiceException {
         Optional<MovieEntity> movie = movieRepository.findById(movieId);
-        if (movie.get().getImage() != null)
-        {
+        if (movie.get().getImage() != null) {
             try {
                 imageRepository.saveImage(image, movie.get().getImage());
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 throw new ServiceException("Ошибка при обновлении постера");
             }
-        }
-        else {
+        } else {
             UUID imageId = UUID.randomUUID();
             try {
                 imageRepository.saveImage(image, imageId);
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 throw new ServiceException("Ошибка при сохранении постера");
             }
             movie.get().setImage(imageId);
@@ -123,22 +120,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public ResponseEntity<byte[]> getMovieImage(UUID movieId) throws ServiceException {
-        Optional<MovieEntity> movie = movieRepository.findById(movieId);
-        if (!movie.isPresent()){
-            throw new ServiceException("Фильма с таким id не существует");
-        }
+    public ResponseEntity<byte[]> getMovieImage(UUID imageId) throws ServiceException {
         byte[] imageBytes;
-        if (movie.get().getImage() != null)
-        {
-            try {
-                imageBytes = imageRepository.getImage(movie.get().getImage());
-            }
-            catch (IOException e){
-                throw new ServiceException("Проблема при получении постера фильма");
-            }
-        }
-        else {
+        try {
+            imageBytes = imageRepository.getImage(imageId);
+        } catch (IOException e) {
+            throw new ServiceException("Проблема при получении постера фильма");
+        } catch (Exception e) {
             throw new ServiceException("Постера для запрашиваемого фильма не существует");
         }
 

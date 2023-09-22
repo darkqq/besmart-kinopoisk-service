@@ -11,11 +11,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class MovieShortDetailsTO {
-    private UUID movieId;
+    private UUID id;
     private UUID image;
     private String title;
     private double rating;
-    private String description;
-    private double boxOffice;
     private LocalDate premiere;
 }

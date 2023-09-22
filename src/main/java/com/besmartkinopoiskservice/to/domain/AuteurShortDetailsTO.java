@@ -13,7 +13,5 @@ import java.util.UUID;
 public class AuteurShortDetailsTO {
     private UUID auteurId;
     private String name;
-    private String description;
     private UUID image;
-    private LocalDate birthday;
 }

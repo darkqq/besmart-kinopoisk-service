@@ -5,7 +5,7 @@ import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.request.movie.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieShortInfoResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.GetMovieShortDetailsResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,20 +73,20 @@ public class MovieController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<GetMovieResponseTO> getMovies(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) throws ServiceException, IOException {
-        return ResponseEntity.ok(movieService.findMovies(movieTitle, year, sortType, pageSize, offset));
+    @GetMapping("/details")
+    public ResponseEntity<GetMovieResponseTO> getMovies(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
+        return ResponseEntity.ok(movieService.findMovie(movieId));
     }
 
     //admin
     @GetMapping("/image")
-    public ResponseEntity<byte[]> getMovieImage(@RequestParam(name = "movieid") UUID movieId) throws ServiceException, IOException {
-        return movieService.getMovieImage(movieId);
+    public ResponseEntity<byte[]> getMovieImage(@RequestParam(name = "imageid") UUID imageId) throws ServiceException {
+        return movieService.getMovieImage(imageId);
     }
 
     //moder, admin
-    @GetMapping("/info")
-    public ResponseEntity<GetMovieShortInfoResponseTO> getMovieInfo(@RequestParam(name = "movie") String movieTitle, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "listsize", required = false, defaultValue = "10") int commentsListSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) {
-        return ResponseEntity.ok(null);
+    @GetMapping("/list")
+    public ResponseEntity<GetMovieShortDetailsResponseTO> getMovieShortDetails(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) {
+        return ResponseEntity.ok(movieService.findMoviesShortDetails(movieTitle, year, sortType, pageSize, offset));
     }
 }
