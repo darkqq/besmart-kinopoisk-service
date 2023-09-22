@@ -22,4 +22,6 @@ public class MovieDetailsTO {
 
     private List<AuteurShortDetailsTO> actors;
     private List<AuteurShortDetailsTO> directors;
+
+
 }

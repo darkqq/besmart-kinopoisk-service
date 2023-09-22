@@ -5,6 +5,7 @@ import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.to.domain.AuteurShortDetailsTO;
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
 import com.besmartkinopoiskservice.to.domain.MovieShortDetailsTO;
+import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
 import com.besmartkinopoiskservice.util.RatingCalculatorUtil;
 
 import java.util.ArrayList;
