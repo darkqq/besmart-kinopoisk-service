@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class MovieDetailsTO {
-    private UUID movieId;
+    private UUID id;
     private UUID image;
     private String title;
     private double rating;

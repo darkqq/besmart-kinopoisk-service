@@ -1,10 +1,10 @@
 package com.besmartkinopoiskservice.controller;
 
-import com.besmartkinopoiskservice.to.request.auteurrequest.*;
+import com.besmartkinopoiskservice.to.request.auteur.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.GetMoviesListResponseTo;
-import com.besmartkinopoiskservice.to.response.auteurresponse.GetAuteurPageResponseTO;
-import com.besmartkinopoiskservice.to.response.auteurresponse.GetAuteurResponseTO;
+import com.besmartkinopoiskservice.to.response.auteur.GetAuteurPageResponseTO;
+import com.besmartkinopoiskservice.to.response.auteur.GetAuteurResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

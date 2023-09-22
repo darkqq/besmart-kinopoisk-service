@@ -1,13 +1,14 @@
 package com.besmartkinopoiskservice.controller;
 
-import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.UserService;
-import com.besmartkinopoiskservice.to.request.userrequest.*;
+import com.besmartkinopoiskservice.to.request.user.*;
 import com.besmartkinopoiskservice.to.response.*;
-import com.besmartkinopoiskservice.to.response.userresponses.*;
+import com.besmartkinopoiskservice.to.response.user.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -16,30 +17,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<GetUserPageResponseTO> getUserPage(@RequestParam(name = "username") String username) {
+    public ResponseEntity<GetUserResponseTO> getUserPage(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 
     //owner, admin
     @GetMapping("/info")
-    public ResponseEntity<GetUserResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
-    }
-
-    @GetMapping("/comments")
-    public ResponseEntity<GetCommentsResponseTO> getUserComments(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
-    }
-
-    //owner, moderator, admin
-    @PutMapping("/comments/update")
-    public ResponseEntity<EmptyResponseTO> updateUserComments(@RequestBody UpdateCommentRequestTO request) {
-        return ResponseEntity.ok(null);
-    }
-
-    //owner, moderator, admin
-    @PutMapping("/comments/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserComments(@RequestBody DeleteCommentRequestTO request) {
+    public ResponseEntity<GetUserShortInfoResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
         return ResponseEntity.ok(null);
     }
 
@@ -56,7 +40,7 @@ public class UserController {
 
     //owner, admin
     @PutMapping("/favorite/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestBody DeleteFavoriteRequestTO request) {
+    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "movieid") UUID movieId) {
         return ResponseEntity.ok(null);
     }
 }

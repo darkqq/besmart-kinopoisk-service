@@ -27,12 +27,15 @@ public class MovieEntity {
     private String description;
     private double boxOffice;
     private LocalDate premiere;
+    private int premiereYear;
 
     @OneToMany(
             cascade = CascadeType.ALL,
             mappedBy = "movie"
     )
     private List<RatingEntity> rating = new ArrayList<>();
+
+    private double currentRating;
 
     @OneToMany(
             cascade = CascadeType.ALL,
@@ -46,7 +49,7 @@ public class MovieEntity {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private List<ActorEntity> actors = new ArrayList<>();
+    private List<AuthorEntity> actors = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -54,7 +57,7 @@ public class MovieEntity {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "director_id")
     )
-    private List<DirectorEntity> directors = new ArrayList<>();
+    private List<AuthorEntity> directors = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

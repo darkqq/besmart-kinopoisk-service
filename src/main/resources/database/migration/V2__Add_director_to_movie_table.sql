@@ -1,5 +1,5 @@
-create table movie_actor{
+create table movie_director{
     movie_id UUID not null references movie,
-    director_id UUID not null references director,
+    author_id UUID not null references author,
     primary key (movie_id, director_id)
     }
