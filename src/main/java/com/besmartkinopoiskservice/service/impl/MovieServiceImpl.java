@@ -7,21 +7,16 @@ import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
-import com.besmartkinopoiskservice.to.domain.MovieShortDetailsTO;
 import com.besmartkinopoiskservice.to.request.movie.CreateMovieRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieShortDetailsResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.MovieDetailsResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.MovieListResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MovieMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -29,7 +24,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
-    private final ImageRepository imageRepository;
 
     @Override
     public EmptyResponseTO addMovieToDatabase(CreateMovieRequestTO request) throws ServiceException {
@@ -49,90 +43,47 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public GetMovieResponseTO findMovie(UUID movieId) throws ServiceException {
+    public MovieDetailsResponseTO findMovie(UUID movieId) throws ServiceException {
         Optional<MovieEntity> movie = movieRepository.findById(movieId);
         if (!movie.isPresent()){
-            throw new ServiceException("Фильма с таким id не существует");
+            throw new ServiceException("Ошибка при поиске фильма");
         }
-        return new GetMovieResponseTO(MovieMapper.toDto(movie.get()));
+        return new MovieDetailsResponseTO(MovieMapper.toDto(movie.get()));
     }
 
     @Override
-    public GetMovieShortDetailsResponseTO findMoviesShortDetails(String title, Integer year, String sortType, int pageSize, int offset) {
-        List<MovieEntity> movie = new ArrayList<>();
+    public MovieListResponseTO findMoviesShortDetails(String title, Integer year, String sortType, int pageSize, int offset) {
+        List<MovieEntity> movies = new ArrayList<>();
+        Sort sort;
+        if (sortType == SortType.TIME.toString()) {
+            sort = Sort.by("premiere");
+        } else if (sortType == SortType.RATING.toString()) {
+            sort = Sort.by("currentRating");
+        } else {
+            sort = Sort.by("premiere");
+        }
+        PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
+
+
         if (year == null && title == null) {
-            movie = movieRepository.findAll();
+            movies = movieRepository.findAll(pageRequest).getContent();
         } else {
             if (year != null) {
-                movie = movieRepository.findAllByPremiereYearAfter(year - 1);
+                movies = movieRepository.findAllByPremiereYearAfter(year - 1, pageRequest);
             }
             if (title != null) {
-                movie.addAll(movieRepository.findAllByTitleContaining(title));
+                movies.addAll(movieRepository.findAllByTitleContaining(title, pageRequest));
             }
-
-            Set<MovieEntity> movieSet = new HashSet<>(movie);
-            movie.clear();
-            movie.addAll(movieSet);
         }
 
-        if (sortType == SortType.TIME.toString()) {
-            Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
-        } else if (sortType == SortType.RATING.toString()) {
-            Collections.sort(movie, Comparator.comparingDouble(MovieEntity::getCurrentRating));
-        } else {
-            Collections.sort(movie, Comparator.comparing(MovieEntity::getPremiere));
-        }
 
-        List<MovieEntity> movies = new ArrayList<>();
-        for (int i = 0; i < pageSize && i < movie.size(); i++) {
-            movies.add(movie.get(i));
-        }
-
-        List<MovieShortDetailsTO> moviesDetails = new ArrayList<>();
+        List<MovieDetailsTO> moviesDetails = new ArrayList<>();
         for (int i = 0; i < movies.size(); i++) {
             moviesDetails.add(MovieMapper.toShortDto(movies.get(i)));
         }
 
-        return new GetMovieShortDetailsResponseTO(moviesDetails);
+        return new MovieListResponseTO(moviesDetails);
     }
 
-    @Override
-    public EmptyResponseTO updateMovieImage(UUID movieId, MultipartFile image) throws ServiceException {
-        Optional<MovieEntity> movie = movieRepository.findById(movieId);
-        if (movie.get().getImage() != null) {
-            try {
-                imageRepository.saveImage(image, movie.get().getImage());
-            } catch (IOException e) {
-                throw new ServiceException("Ошибка при обновлении постера");
-            }
-        } else {
-            UUID imageId = UUID.randomUUID();
-            try {
-                imageRepository.saveImage(image, imageId);
-            } catch (IOException e) {
-                throw new ServiceException("Ошибка при сохранении постера");
-            }
-            movie.get().setImage(imageId);
-        }
-        movieRepository.save(movie.get());
 
-        return new EmptyResponseTO();
-    }
-
-    @Override
-    public ResponseEntity<byte[]> getMovieImage(UUID imageId) throws ServiceException {
-        byte[] imageBytes;
-        try {
-            imageBytes = imageRepository.getImage(imageId);
-        } catch (IOException e) {
-            throw new ServiceException("Проблема при получении постера фильма");
-        } catch (Exception e) {
-            throw new ServiceException("Постера для запрашиваемого фильма не существует");
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        headers.setContentLength(imageBytes.length);
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-    }
 }

@@ -2,25 +2,25 @@ package com.besmartkinopoiskservice.util.mapper;
 
 import com.besmartkinopoiskservice.domain.AuthorEntity;
 import com.besmartkinopoiskservice.domain.MovieEntity;
-import com.besmartkinopoiskservice.to.domain.AuteurShortDetailsTO;
+import com.besmartkinopoiskservice.to.domain.AuteurDetailsTO;
+import com.besmartkinopoiskservice.to.domain.MovieFullDetailsTO;
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;
-import com.besmartkinopoiskservice.to.domain.MovieShortDetailsTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
 import com.besmartkinopoiskservice.util.RatingCalculatorUtil;
+import com.besmartkinopoiskservice.util.UrlPathUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MovieMapper {
 
-    public static MovieDetailsTO toDto(MovieEntity entity) {
 
-        return new MovieDetailsTO(
+    public static MovieFullDetailsTO toDto(MovieEntity entity) {
+
+        return new MovieFullDetailsTO(
                 entity.getId(),
-                entity.getImage(),
+                UrlPathUtil.getMovieImageRequestPath(entity.getImage()),
                 entity.getTitle(),
-                new RatingCalculatorUtil().getAverageRating(entity.getRating()),
+                RatingCalculatorUtil.getAverageRating(entity.getRating()),
                 entity.getDescription(),
                 entity.getBoxOffice(),
                 entity.getPremiere(),
@@ -29,18 +29,18 @@ public class MovieMapper {
         );
     }
 
-    public static MovieShortDetailsTO toShortDto(MovieEntity entity) {
-        return new MovieShortDetailsTO(
+    public static MovieDetailsTO toShortDto(MovieEntity entity) {
+        return new MovieDetailsTO(
                 entity.getId(),
-                entity.getImage(),
+                UrlPathUtil.getMovieImageRequestPath(entity.getImage()),
                 entity.getTitle(),
-                new RatingCalculatorUtil().getAverageRating(entity.getRating()),
+                RatingCalculatorUtil.getAverageRating(entity.getRating()),
                 entity.getPremiere()
         );
     }
 
-    private static List<AuteurShortDetailsTO> getAuteursShortDetailsList(List<AuthorEntity> entities) {
-        List<AuteurShortDetailsTO> auteurShortDetails = new ArrayList<>();
+    private static List<AuteurDetailsTO> getAuteursShortDetailsList(List<AuthorEntity> entities) {
+        List<AuteurDetailsTO> auteurShortDetails = new ArrayList<>();
         for (int i = 0; i < entities.size(); i++) {
             auteurShortDetails.add(AuteurMapper.toShortDto(entities.get(i)));
         }

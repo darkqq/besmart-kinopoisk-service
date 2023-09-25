@@ -1,6 +1,6 @@
 package com.besmartkinopoiskservice.to.response.auteur;
 
-import com.besmartkinopoiskservice.to.domain.AuteurShortDetailsTO;
+import com.besmartkinopoiskservice.to.domain.AuteurDetailsTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class GetAuteurResponseTO {
-    private AuteurShortDetailsTO auteurDetails;
+    private AuteurDetailsTO auteurDetails;
 }

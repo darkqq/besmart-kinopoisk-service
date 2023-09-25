@@ -4,14 +4,13 @@ import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.request.movie.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieResponseTO;
-import com.besmartkinopoiskservice.to.response.movie.GetMovieShortDetailsResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.MovieDetailsResponseTO;
+import com.besmartkinopoiskservice.to.response.movie.MovieListResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -62,11 +61,6 @@ public class MovieController {
         return ResponseEntity.ok(null);
     }
 
-    @PutMapping("/update/image")
-    public ResponseEntity<EmptyResponseTO> updateMovieImage(@RequestParam("movieid") UUID movieId, @RequestParam("image") MultipartFile image) throws ServiceException {
-        return ResponseEntity.ok(movieService.updateMovieImage(movieId, image));
-    }
-
     //admin
     @PutMapping("/update/description")
     public ResponseEntity<EmptyResponseTO> updateMovieDescription(@RequestBody UpdateMovieDescriptionRequestTO request) {
@@ -74,19 +68,12 @@ public class MovieController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<GetMovieResponseTO> getMovies(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
+    public ResponseEntity<MovieDetailsResponseTO> getMovie(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
         return ResponseEntity.ok(movieService.findMovie(movieId));
     }
 
-    //admin
-    @GetMapping("/image")
-    public ResponseEntity<byte[]> getMovieImage(@RequestParam(name = "imageid") UUID imageId) throws ServiceException {
-        return movieService.getMovieImage(imageId);
-    }
-
-    //moder, admin
     @GetMapping("/list")
-    public ResponseEntity<GetMovieShortDetailsResponseTO> getMovieShortDetails(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "10") int offset) {
+    public ResponseEntity<MovieListResponseTO> getMoviesList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) {
         return ResponseEntity.ok(movieService.findMoviesShortDetails(movieTitle, year, sortType, pageSize, offset));
     }
 }

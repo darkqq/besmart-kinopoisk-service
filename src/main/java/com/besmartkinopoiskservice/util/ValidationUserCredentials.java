@@ -11,7 +11,7 @@ public class ValidationUserCredentials {
                 }
             } else {
                 result.setIsSuccess(false);
-                result.addErrMesaeges("@Недопустимое имя пользователя@");
+                result.addErrMesaeges("Недопустимое имя пользователя");
                 return result;
             }
         }
@@ -26,7 +26,7 @@ public class ValidationUserCredentials {
             return result;
         } else {
             result.setIsSuccess(false);
-            result.addErrMesaeges("@Недопуcтимый размер пароля@");
+            result.addErrMesaeges("Недопуcтимый размер пароля");
             return result;
         }
     }

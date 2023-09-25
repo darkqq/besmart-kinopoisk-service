@@ -14,7 +14,8 @@ import java.util.UUID;
 @Component
 public class ImageRepositoryImpl implements ImageRepository {
 
-    private final String filePath = new File("").getAbsolutePath() + "/src/main/resources/img/";
+    private static final String localPath = "/img/";
+    private static final String filePath = new File("").getAbsolutePath() + localPath;
 
     @Override
     public void saveImage(MultipartFile image, UUID imageId) throws IOException {
