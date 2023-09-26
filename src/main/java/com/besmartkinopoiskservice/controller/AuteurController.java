@@ -3,8 +3,8 @@ package com.besmartkinopoiskservice.controller;
 import com.besmartkinopoiskservice.to.request.auteur.*;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.GetMoviesListResponseTo;
-import com.besmartkinopoiskservice.to.response.auteur.GetAuteurPageResponseTO;
-import com.besmartkinopoiskservice.to.response.auteur.GetAuteurResponseTO;
+import com.besmartkinopoiskservice.to.response.auteur.AuteurDetailsResponseTO;
+import com.besmartkinopoiskservice.to.response.auteur.AuteurListResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +26,13 @@ public class AuteurController {
     }
 
     @GetMapping("")
-    public ResponseEntity<GetAuteurPageResponseTO> getAuteurPage(@RequestParam(name = "id") UUID id) {
+    public ResponseEntity<AuteurDetailsResponseTO> getAuteurPage(@RequestParam(name = "id") UUID id) {
         return ResponseEntity.ok(null);
     }
 
     //moderator, admin
     @GetMapping("/info")
-    public ResponseEntity<GetAuteurResponseTO> getAuteurInfo(@RequestParam(name = "id") UUID id) {
+    public ResponseEntity<AuteurListResponseTO> getAuteurInfo(@RequestParam(name = "id") UUID id) {
         return ResponseEntity.ok(null);
     }
 

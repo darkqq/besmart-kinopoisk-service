@@ -34,6 +34,7 @@ public class MovieServiceImpl implements MovieService {
 
         MovieEntity movie = new MovieEntity();
         movie.setTitle(request.getTitle());
+        movie.setImage(request.getImageId());
         movie.setDescription(request.getDescription());
         movie.setPremiere(premiere);
         movie.setPremiereYear(premiere.getYear());
@@ -52,7 +53,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieListResponseTO findMoviesShortDetails(String title, Integer year, String sortType, int pageSize, int offset) {
+    public MovieListResponseTO findMoviesList(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException {
         List<MovieEntity> movies = new ArrayList<>();
         Sort sort;
         if (sortType == SortType.TIME.toString()) {
@@ -60,20 +61,23 @@ public class MovieServiceImpl implements MovieService {
         } else if (sortType == SortType.RATING.toString()) {
             sort = Sort.by("currentRating");
         } else {
-            sort = Sort.by("premiere");
+            throw new ServiceException("Недопустимый параметр сортировки");
         }
         PageRequest pageRequest = PageRequest.of(offset, pageSize, sort);
 
 
-        if (year == null && title == null) {
-            movies = movieRepository.findAll(pageRequest).getContent();
-        } else {
-            if (year != null) {
-                movies = movieRepository.findAllByPremiereYearAfter(year - 1, pageRequest);
-            }
-            if (title != null) {
-                movies.addAll(movieRepository.findAllByTitleContaining(title, pageRequest));
-            }
+
+        if (year != null && title != null){
+            movies.addAll(movieRepository.findAllByTitleContainingOrPremiereYearAfter(title, year - 1, pageRequest));
+        }
+        else if (year != null) {
+            movies = movieRepository.findAllByPremiereYearAfter(year - 1, pageRequest);
+        }
+        else if (title != null) {
+            movies.addAll(movieRepository.findAllByTitleContaining(title, pageRequest));
+        }
+        else {
+                movies = movieRepository.findAll(pageRequest).getContent();
         }
 
 

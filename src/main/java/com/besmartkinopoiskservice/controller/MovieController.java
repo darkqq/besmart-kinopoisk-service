@@ -9,7 +9,6 @@ import com.besmartkinopoiskservice.to.response.movie.MovieListResponseTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -68,12 +67,12 @@ public class MovieController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<MovieDetailsResponseTO> getMovie(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
+    public ResponseEntity<MovieDetailsResponseTO> getMovieDetails(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
         return ResponseEntity.ok(movieService.findMovie(movieId));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<MovieListResponseTO> getMoviesList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) {
-        return ResponseEntity.ok(movieService.findMoviesShortDetails(movieTitle, year, sortType, pageSize, offset));
+    public ResponseEntity<MovieListResponseTO> getMoviesList(@RequestParam(name = "movie", required = false) String movieTitle, @RequestParam(name = "year", required = false) Integer year, @RequestParam(name = "sort", required = false, defaultValue = "TIME") String sortType, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) throws ServiceException {
+        return ResponseEntity.ok(movieService.findMoviesList(movieTitle, year, sortType, pageSize, offset));
     }
 }

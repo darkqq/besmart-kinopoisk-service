@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetAuteurResponseTO {
+public class AuteurListResponseTO {
     private AuteurDetailsTO auteurDetails;
 }

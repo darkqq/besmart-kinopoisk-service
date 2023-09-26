@@ -26,7 +26,6 @@ public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public byte[] getImage(UUID imageId) throws IOException {
         Path imagePath = Paths.get(filePath + imageId + ".jpg");
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        return imageBytes;
+        return Files.readAllBytes(imagePath);
     }
 }

@@ -5,8 +5,6 @@ import com.besmartkinopoiskservice.to.request.movie.CreateMovieRequestTO;
 import com.besmartkinopoiskservice.to.response.EmptyResponseTO;
 import com.besmartkinopoiskservice.to.response.movie.MovieDetailsResponseTO;
 import com.besmartkinopoiskservice.to.response.movie.MovieListResponseTO;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -15,5 +13,5 @@ public interface MovieService {
 
     MovieDetailsResponseTO findMovie(UUID movieId) throws ServiceException;
 
-    MovieListResponseTO findMoviesShortDetails(String title, Integer year, String sortType, int pageSize, int offset);
+    MovieListResponseTO findMoviesList(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException;
 }

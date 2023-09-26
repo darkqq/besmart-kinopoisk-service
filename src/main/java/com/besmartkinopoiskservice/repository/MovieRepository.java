@@ -21,4 +21,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     List<MovieEntity> findAllByPremiereYearAfter(int year, Pageable pageable);
 
     List<MovieEntity> findAllByTitleContaining(String title, Pageable pageable);
+
+    List<MovieEntity> findAllByTitleContainingOrPremiereYearAfter(String title, int year, Pageable pageable);
 }
