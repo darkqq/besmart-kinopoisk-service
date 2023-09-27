@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class MovieDetailsResponseTO extends MovieFullDetailsTO {
-    private static ImageRepository imageRepository;
-
     public MovieDetailsResponseTO(MovieFullDetailsTO movieDetails) {
         this.setId(movieDetails.getId());
         this.setImage(movieDetails.getImage());
@@ -19,5 +17,4 @@ public class MovieDetailsResponseTO extends MovieFullDetailsTO {
         this.setActors(movieDetails.getActors());
         this.setDirectors(movieDetails.getDirectors());
     }
-
 }

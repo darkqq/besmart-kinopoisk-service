@@ -6,8 +6,11 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class AuteurDetailsResponseTO {
-    private AuteurFullDetailsTO auteurDetail;
+public class AuteurDetailsResponseTO extends AuteurFullDetailsTO {
+    public AuteurDetailsResponseTO(AuteurFullDetailsTO auteurDetails){
+        this.setName(auteurDetails.getName());
+        this.setDescription(auteurDetails.getDescription());
+        this.setBirthday(auteurDetails.getBirthday());
+        this.setImage(auteurDetails.getImage());
+    }
 }

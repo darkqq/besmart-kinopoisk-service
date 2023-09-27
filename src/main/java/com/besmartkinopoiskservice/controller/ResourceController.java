@@ -4,6 +4,9 @@ import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.ResourceService;
 import com.besmartkinopoiskservice.to.response.ResourceResponseTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +21,11 @@ public class ResourceController {
 
     @GetMapping("/image/movie/{imageId}")
     public ResponseEntity<byte[]> getMovieImage(@PathVariable UUID imageId) throws ServiceException {
-        return resourceService.getResource(imageId);
+        byte[] imageBytes = resourceService.getResource(imageId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setContentLength(imageBytes.length);
+        return ResponseEntity.ok().headers(headers).body(imageBytes);
     }
 
     @PutMapping("/image/movie/update")

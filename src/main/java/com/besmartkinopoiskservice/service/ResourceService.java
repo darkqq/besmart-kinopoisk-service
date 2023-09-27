@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface ResourceService {
-    ResponseEntity<byte[]> getResource(UUID imageId) throws ServiceException;
+    byte[] getResource(UUID imageId) throws ServiceException;
 
     ResourceResponseTO uploadResource(MultipartFile image) throws ServiceException;
 }

@@ -56,9 +56,9 @@ public class MovieServiceImpl implements MovieService {
     public MovieListResponseTO findMoviesList(String title, Integer year, String sortType, int pageSize, int offset) throws ServiceException {
         List<MovieEntity> movies = new ArrayList<>();
         Sort sort;
-        if (sortType == SortType.TIME.toString()) {
+        if (sortType.equals(SortType.TIME.toString())) {
             sort = Sort.by("premiere");
-        } else if (sortType == SortType.RATING.toString()) {
+        } else if (sortType.equals(SortType.RATING.toString())) {
             sort = Sort.by("currentRating");
         } else {
             throw new ServiceException("Недопустимый параметр сортировки");

@@ -22,7 +22,7 @@ public class ResourceServiceImpl implements ResourceService {
     private final ImageRepository imageRepository;
 
     @Override
-    public ResponseEntity<byte[]> getResource(UUID imageId) throws ServiceException {
+    public byte[] getResource(UUID imageId) throws ServiceException {
         byte[] imageBytes;
         try {
             imageBytes = imageRepository.getImage(imageId);
@@ -35,7 +35,7 @@ public class ResourceServiceImpl implements ResourceService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.setContentLength(imageBytes.length);
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        return imageBytes;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class ResourceServiceImpl implements ResourceService {
         } catch (IOException e) {
             throw new ServiceException("Ошибка при сохранении постера");
         }
-        return new ResourceResponseTO();
+        return new ResourceResponseTO(imageId);
     }
 }

@@ -33,7 +33,6 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public byte[] getImage(UUID imageId) throws IOException {
-        System.out.println(localPath);
         Path imagePath = Paths.get(filePath + imageId + ".jpg");
         return Files.readAllBytes(imagePath);
     }
