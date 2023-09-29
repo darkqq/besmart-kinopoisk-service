@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class AuteurListResponseTO {
-    private List<AuteurDetailsTO> auteurDetails;
+    private List<AuteurDetailsTO> auteurs;
 }

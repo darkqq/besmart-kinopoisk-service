@@ -25,8 +25,8 @@ public class MovieController {
     }
 
     //admin
-    @PostMapping("/delete")
-    public ResponseEntity<EmptyResponseTO> deleteMovie(@RequestBody DeleteMovieRequestTO request) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<EmptyResponseTO> deleteMovie(@RequestParam(name = "movieId", required = false) UUID movieId) {
         return ResponseEntity.ok(null);
     }
 

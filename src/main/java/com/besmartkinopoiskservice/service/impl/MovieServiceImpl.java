@@ -3,7 +3,6 @@ package com.besmartkinopoiskservice.service.impl;
 import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.enumeration.SortType;
 import com.besmartkinopoiskservice.exception.ServiceException;
-import com.besmartkinopoiskservice.repository.ImageRepository;
 import com.besmartkinopoiskservice.repository.MovieRepository;
 import com.besmartkinopoiskservice.service.MovieService;
 import com.besmartkinopoiskservice.to.domain.MovieDetailsTO;

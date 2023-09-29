@@ -19,7 +19,7 @@ import java.util.UUID;
 public class ResourceController {
     private final ResourceService resourceService;
 
-    @GetMapping("/image/movie/{imageId}")
+    @GetMapping("/image/{imageId}")
     public ResponseEntity<byte[]> getMovieImage(@PathVariable UUID imageId) throws ServiceException {
         byte[] imageBytes = resourceService.getResource(imageId);
         HttpHeaders headers = new HttpHeaders();
@@ -28,7 +28,7 @@ public class ResourceController {
         return ResponseEntity.ok().headers(headers).body(imageBytes);
     }
 
-    @PutMapping("/image/movie/update")
+    @PutMapping("/image/update")
     public ResponseEntity<ResourceResponseTO> updateMovieImage(@RequestParam("image") MultipartFile image) throws ServiceException {
         return ResponseEntity.ok(resourceService.uploadResource(image));
     }
