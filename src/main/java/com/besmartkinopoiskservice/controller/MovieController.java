@@ -67,7 +67,7 @@ public class MovieController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<MovieDetailsResponseTO> getMovieDetails(@RequestParam(name = "movieId", required = false) UUID movieId) throws ServiceException {
+    public ResponseEntity<MovieDetailsResponseTO> getMovieDetails(@RequestParam(name = "movieId") UUID movieId) throws ServiceException {
         return ResponseEntity.ok(movieService.findMovie(movieId));
     }
 
