@@ -1,6 +1,8 @@
 package com.besmartkinopoiskservice.repository.impl;
 
 import com.besmartkinopoiskservice.repository.ImageRepository;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +16,14 @@ import java.util.UUID;
 @Component
 public class ImageRepositoryImpl implements ImageRepository {
 
-    private final String filePath = new File("").getAbsolutePath() + "/src/main/resources/img/";
+    @Value("${properties.resources.location}")
+    private String localPath;
+    private String filePath;
+
+    @PostConstruct
+    public void init(){
+        this.filePath = new File("").getAbsolutePath() + this.localPath;
+    }
 
     @Override
     public void saveImage(MultipartFile image, UUID imageId) throws IOException {
@@ -25,7 +34,6 @@ public class ImageRepositoryImpl implements ImageRepository {
     @Override
     public byte[] getImage(UUID imageId) throws IOException {
         Path imagePath = Paths.get(filePath + imageId + ".jpg");
-        byte[] imageBytes = Files.readAllBytes(imagePath);
-        return imageBytes;
+        return Files.readAllBytes(imagePath);
     }
 }

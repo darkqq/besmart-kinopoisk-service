@@ -1,6 +1,7 @@
 package com.besmartkinopoiskservice.repository;
 
 import com.besmartkinopoiskservice.domain.MovieEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,11 +16,11 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Integer> {
     boolean existsByTitle(String title);
     boolean existsByPremiere(LocalDate premiere);
 
-    Optional<MovieEntity> findAllByTitle(String title);
-
     Optional<MovieEntity> findById(UUID id);
 
-    List<MovieEntity> findAllByPremiereYearAfter(int year);
+    List<MovieEntity> findAllByPremiereYearAfter(int year, Pageable pageable);
 
-    List<MovieEntity> findAllByTitleContaining(String title);
+    List<MovieEntity> findAllByTitleContaining(String title, Pageable pageable);
+
+    List<MovieEntity> findAllByTitleContainingOrPremiereYearAfter(String title, int year, Pageable pageable);
 }

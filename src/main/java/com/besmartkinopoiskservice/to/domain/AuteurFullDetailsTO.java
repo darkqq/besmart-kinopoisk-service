@@ -10,10 +10,9 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AuteurShortDetailsTO {
-    private UUID auteurId;
+public class AuteurFullDetailsTO {
     private String name;
     private String description;
-    private UUID image;
+    private String image;
     private LocalDate birthday;
 }

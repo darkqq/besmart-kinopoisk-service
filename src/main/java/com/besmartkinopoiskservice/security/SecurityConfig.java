@@ -27,10 +27,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/movie")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/resource/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/movie/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/movie/add")).hasAuthority(Role.ADMIN.toString())
-                        .requestMatchers(new AntPathRequestMatcher("/movie/update/image")).hasAuthority(Role.ADMIN.toString())
-                        .requestMatchers(new AntPathRequestMatcher("/movie/*")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/movie/update/*")).hasAuthority(Role.ADMIN.toString())
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
