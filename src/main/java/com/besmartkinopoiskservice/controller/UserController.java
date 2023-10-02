@@ -1,5 +1,6 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.user.*;
 import com.besmartkinopoiskservice.to.response.*;
@@ -16,15 +17,14 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("")
-    public ResponseEntity<GetUserResponseTO> getUserPage(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    @GetMapping("/list")
+    public ResponseEntity<UsersListResponseTO> getUsersList(@RequestParam(name = "username") String username) {
+        return ResponseEntity.ok(userService.getUsersList(username));
     }
 
-    //owner, admin
-    @GetMapping("/info")
-    public ResponseEntity<GetUserShortInfoResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    @GetMapping("/details")
+    public ResponseEntity<UserDetailsResponseTO> getUserDetails(@RequestParam(name = "userid") UUID userId) throws ServiceException {
+        return ResponseEntity.ok(userService.getUserDetails(userId));
     }
 
     @GetMapping("/favorites")
@@ -33,13 +33,13 @@ public class UserController {
     }
 
     //owner
-    @PostMapping("favorite/add")
+    @PostMapping("/favorite/add")
     public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestBody AddFavoriteRequestTO request) {
         return ResponseEntity.ok(null);
     }
 
     //owner, admin
-    @PutMapping("/favorite/delete")
+    @DeleteMapping("/favorite/delete")
     public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "movieid") UUID movieId) {
         return ResponseEntity.ok(null);
     }

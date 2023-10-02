@@ -14,7 +14,7 @@ import java.util.List;
 public class MovieMapper {
 
 
-    public static MovieFullDetailsTO toDto(MovieEntity entity) {
+    public static MovieFullDetailsTO toFullDto(MovieEntity entity) {
 
         return new MovieFullDetailsTO(
                 entity.getId(),
@@ -24,12 +24,12 @@ public class MovieMapper {
                 entity.getDescription(),
                 entity.getBoxOffice(),
                 entity.getPremiere(),
-                getAuteursShortDetailsList(entity.getActors()),
-                getAuteursShortDetailsList(entity.getDirectors())
+                getAuteursDetailsList(entity.getActors()),
+                getAuteursDetailsList(entity.getDirectors())
         );
     }
 
-    public static MovieDetailsTO toShortDto(MovieEntity entity) {
+    public static MovieDetailsTO toDto(MovieEntity entity) {
         return new MovieDetailsTO(
                 entity.getId(),
                 UrlPathUtil.getMovieImageRequestPath(entity.getImage()),
@@ -39,10 +39,10 @@ public class MovieMapper {
         );
     }
 
-    private static List<AuteurDetailsTO> getAuteursShortDetailsList(List<AuthorEntity> entities) {
+    private static List<AuteurDetailsTO> getAuteursDetailsList(List<AuthorEntity> entities) {
         List<AuteurDetailsTO> auteurShortDetails = new ArrayList<>();
         for (int i = 0; i < entities.size(); i++) {
-            auteurShortDetails.add(AuteurMapper.toShortDto(entities.get(i)));
+            auteurShortDetails.add(AuteurMapper.toDto(entities.get(i)));
         }
         return auteurShortDetails;
     }
