@@ -6,6 +6,7 @@ import com.besmartkinopoiskservice.to.request.user.*;
 import com.besmartkinopoiskservice.to.response.*;
 import com.besmartkinopoiskservice.to.response.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,13 +35,13 @@ public class UserController {
 
     //owner
     @PostMapping("/favorite/add")
-    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException {
-        return ResponseEntity.ok(userService.addToUserFavoriteMovies(request));
+    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(userService.addToUserFavoriteMovies(authorizationHeader, request));
     }
 
     //owner, admin
     @DeleteMapping("/favorite/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "userid") UUID userId, @RequestParam(name = "movieid") UUID movieId) throws ServiceException {
-        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(userId, movieId));
+    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestParam(name = "userid") UUID userId, @RequestParam(name = "movieid") UUID movieId) throws ServiceException {
+        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(authorizationHeader, userId, movieId));
     }
 }

@@ -16,7 +16,7 @@ public interface UserService {
 
     UserFavoriteMoviesListResponseTO getUserFavoriteMovies(UUID userId) throws ServiceException;
 
-    EmptyResponseTO addToUserFavoriteMovies(AddUserFavoriteMovieRequestTO request) throws ServiceException;
+    EmptyResponseTO addToUserFavoriteMovies(String token, AddUserFavoriteMovieRequestTO request) throws ServiceException;
 
-    EmptyResponseTO deleteFromUserFavoriteMovies(UUID userId, UUID movieId) throws ServiceException;
+    EmptyResponseTO deleteFromUserFavoriteMovies(String token, UUID userId, UUID movieId) throws ServiceException;
 }
