@@ -28,19 +28,19 @@ public class UserController {
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<GetMoviesListResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<UserFavoriteMoviesListResponseTO> getUserFavorite(@RequestParam(name = "userid") UUID userId) throws ServiceException {
+        return ResponseEntity.ok(userService.getUserFavoriteMovies(userId));
     }
 
     //owner
     @PostMapping("/favorite/add")
-    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestBody AddFavoriteRequestTO request) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(userService.addToUserFavoriteMovies(request));
     }
 
     //owner, admin
     @DeleteMapping("/favorite/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "movieid") UUID movieId) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "userid") UUID userId, @RequestParam(name = "movieid") UUID movieId) throws ServiceException {
+        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(userId, movieId));
     }
 }
