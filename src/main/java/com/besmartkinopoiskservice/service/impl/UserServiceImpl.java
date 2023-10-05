@@ -2,7 +2,6 @@ package com.besmartkinopoiskservice.service.impl;
 
 import com.besmartkinopoiskservice.domain.MovieEntity;
 import com.besmartkinopoiskservice.domain.UserEntity;
-import com.besmartkinopoiskservice.enumeration.Role;
 import com.besmartkinopoiskservice.exception.AuthenticationException;
 import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.repository.MovieRepository;
@@ -19,6 +18,7 @@ import com.besmartkinopoiskservice.to.response.user.UsersListResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MovieMapper;
 import com.besmartkinopoiskservice.util.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,8 +35,9 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
 
     @Override
-    public UsersListResponseTO getUsersList(String username) {
-        List<UserEntity> users = userRepository.findAllByUsernameContaining(username);
+    public UsersListResponseTO getUsers(String username, int pageSize, int offset) {
+        PageRequest pageRequest = PageRequest.of(offset, pageSize);
+        List<UserEntity> users = userRepository.findAllByUsernameContaining(username, pageRequest);
         List<UserDetailsTO> usersDetailsList = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             usersDetailsList.add(UserMapper.toDto(users.get(i)));
@@ -45,42 +46,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailsResponseTO getUserDetails(UUID userId) throws ServiceException {
-        Optional<UserEntity> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            throw new ServiceException("Пользователя не существует");
-        }
+    public UserDetailsResponseTO getUserDetails(String authorizationHeader) throws ServiceException, AuthenticationException {
+        if (authorizationHeader.equals("")) {throw new AuthenticationException("Неавторизованный запрос");}
+        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
         return new UserDetailsResponseTO(UserMapper.toFullDto(user.get()));
     }
 
     @Override
-    public UserFavoriteMoviesListResponseTO getUserFavoriteMovies(UUID userId) throws ServiceException {
-        Optional<UserEntity> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            throw new ServiceException("Пользователя не существует");
-        }
+    public UserFavoriteMoviesListResponseTO getUserFavoriteMovies(String authorizationHeader, int pageSize, int offset) throws ServiceException, AuthenticationException {
+        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
         List<MovieEntity> favoriteMovies = user.get().getFavoriteMovies();
         List<MovieDetailsTO> favoriteMoviesDetails = new ArrayList<>();
-        for (int i = 0; i < favoriteMovies.size(); i++) {
+        for (int i = 1 * (offset * pageSize); i < pageSize * (offset + 1) && i < favoriteMovies.size(); i++) {
             favoriteMoviesDetails.add(MovieMapper.toDto(favoriteMovies.get(i)));
         }
         return new UserFavoriteMoviesListResponseTO(favoriteMoviesDetails);
     }
 
     @Override
-    public EmptyResponseTO addToUserFavoriteMovies(String authorizationHeader, AddUserFavoriteMovieRequestTO request) throws ServiceException {
-        if (!isOwnerCheck(request.getUserId(), authorizationHeader)){
-            throw new ServiceException("Недостаточно прав");
-        }
-
-        Optional<UserEntity> user = userRepository.findById(request.getUserId());
-        if (!user.isPresent()) {
-            throw new ServiceException("Пользователя не существует");
-        }
-        Optional<MovieEntity> movie = movieRepository.findById(request.getMovieId());
-        if (!movie.isPresent()) {
-            throw new ServiceException("Фильма не существует");
-        }
+    public EmptyResponseTO addToUserFavoriteMovies(String authorizationHeader, AddUserFavoriteMovieRequestTO request) throws ServiceException, AuthenticationException {
+        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
+        Optional<MovieEntity> movie = Optional.ofNullable(movieRepository.findById(request.getMovieId()).orElseThrow(() -> new ServiceException("Фильма не существует")));
         user.get().getFavoriteMovies().add(movie.get());
         movie.get().getInUserFavorite().add(user.get());
         userRepository.save(user.get());
@@ -89,19 +75,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public EmptyResponseTO deleteFromUserFavoriteMovies(String authorizationHeader, UUID userId, UUID movieId) throws ServiceException {
-        if (!isOwnerCheck(userId, authorizationHeader)){
-            throw new ServiceException("Недостаточно прав");
-        }
-
-        Optional<UserEntity> user = userRepository.findById(userId);
-        if (!user.isPresent()) {
-            throw new ServiceException("Пользователя не существует");
-        }
-        Optional<MovieEntity> movie = movieRepository.findById(movieId);
-        if (!movie.isPresent()) {
-            throw new ServiceException("Фильма не существует");
-        }
+    public EmptyResponseTO deleteFromUserFavoriteMovies(String authorizationHeader, UUID movieId) throws ServiceException, AuthenticationException {
+        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
+        Optional<MovieEntity> movie = Optional.ofNullable(movieRepository.findById(movieId).orElseThrow(() -> new ServiceException("Фильма не существует")));
         for (int i = 0; i < user.get().getFavoriteMovies().size(); i++) {
             if (user.get().getFavoriteMovies().get(i).getId().equals(movieId)) {
                 user.get().getFavoriteMovies().remove(i);
@@ -115,27 +91,5 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user.get());
         movieRepository.save(movie.get());
         return new EmptyResponseTO();
-    }
-
-    private boolean isOwnerCheck(UUID username, String authorizationHeader) {
-        if (authorizationHeader.equals("")){
-            return false;
-        }
-
-        Optional<UserEntity> user_1 = null;
-        Optional<UserEntity> user_2 = null;
-        try {
-            user_1 = userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7)));
-            user_2 = userRepository.findById(username);
-        } catch (AuthenticationException e) {
-            return false;
-        }
-
-        if (user_1.get().getId().equals(user_2.get().getId())) {
-            return true;
-        } else if (user_1.get().getAuthorities().contains(Role.ADMIN)) {
-            return true;
-        }
-        return false;
     }
 }

@@ -18,7 +18,7 @@ public class MovieMapper {
 
         return new MovieFullDetailsTO(
                 entity.getId(),
-                UrlPathUtil.getMovieImageRequestPath(entity.getImage()),
+                UrlPathUtil.getResourceRequestPath(entity.getImage()),
                 entity.getTitle(),
                 RatingCalculatorUtil.getAverageRating(entity.getRating()),
                 entity.getDescription(),
@@ -32,7 +32,7 @@ public class MovieMapper {
     public static MovieDetailsTO toDto(MovieEntity entity) {
         return new MovieDetailsTO(
                 entity.getId(),
-                UrlPathUtil.getMovieImageRequestPath(entity.getImage()),
+                UrlPathUtil.getResourceRequestPath(entity.getImage()),
                 entity.getTitle(),
                 RatingCalculatorUtil.getAverageRating(entity.getRating()),
                 entity.getPremiere()

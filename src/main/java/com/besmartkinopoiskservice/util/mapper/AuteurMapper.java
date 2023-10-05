@@ -10,7 +10,7 @@ public class AuteurMapper {
         return new AuteurDetailsTO(
                 entity.getId(),
                 entity.getName(),
-                UrlPathUtil.getAuteurImageRequestPath(entity.getImage())
+                UrlPathUtil.getResourceRequestPath(entity.getImage())
         );
     }
 }
