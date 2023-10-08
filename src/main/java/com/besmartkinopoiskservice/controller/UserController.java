@@ -35,13 +35,13 @@ public class UserController {
     }
 
     //owner
-    @PutMapping("/favorite/add")
+    @PutMapping("/favorite")
     public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException, AuthenticationException {
         return ResponseEntity.ok(userService.addToUserFavoriteMovies(authorizationHeader, request));
     }
 
     //owner, admin
-    @DeleteMapping("/favorite/delete")
+    @DeleteMapping("/favorite")
     public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestParam(name = "movieid") UUID movieId) throws ServiceException, AuthenticationException {
         return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(authorizationHeader, movieId));
     }

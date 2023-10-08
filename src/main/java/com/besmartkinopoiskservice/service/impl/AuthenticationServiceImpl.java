@@ -10,8 +10,7 @@ import com.besmartkinopoiskservice.service.JwtService;
 import com.besmartkinopoiskservice.to.request.user.UserLogInRequestTO;
 import com.besmartkinopoiskservice.to.request.user.UserRegisterRequestTO;
 import com.besmartkinopoiskservice.to.response.user.AuthenticationResponseTO;
-import com.besmartkinopoiskservice.util.ValidationResult;
-import com.besmartkinopoiskservice.util.ValidationUserCredentials;
+import com.besmartkinopoiskservice.util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,6 +27,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+
+    private final ValidationUtil validationUserCredentials;
 
     @Override
     public AuthenticationResponseTO registerUser(UserRegisterRequestTO request) throws ServiceException {
@@ -40,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ServiceException("Пользователь с таким email уже существует");
         }
 
-        validationCheck(request.getUsername(), request.getPassword());
+        validationUserCredentials.checkCredentials(request);
 
         if (!request.getPassword().equals(request.getPasswordConfirmation())){
             throw new ServiceException("Пароли не совпадают");
@@ -75,21 +75,5 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         var jwtToken = jwtService.generateToken(user.get());
         return AuthenticationResponseTO.builder().token(jwtToken).build();
-    }
-
-    private void validationCheck(String login, String password) throws ServiceException{
-        ValidationResult result = ValidationUserCredentials.checkLogin(login);
-        if (!result.isSuccess()) {
-            List<String> errMessages = result.getErrMesaeges();
-            for (int i = 0; i < errMessages.size(); i++) {
-                throw new ServiceException(errMessages.get(i));
-            }
-        }
-
-        result = new ValidationUserCredentials().checkPassword(password);
-        if (!result.isSuccess()) {
-            List<String> errMessages = result.getErrMesaeges();
-            throw new ServiceException(errMessages.get(0));
-        }
     }
 }

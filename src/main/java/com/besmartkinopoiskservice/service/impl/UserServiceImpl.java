@@ -17,6 +17,7 @@ import com.besmartkinopoiskservice.to.response.user.UserFavoriteMoviesListRespon
 import com.besmartkinopoiskservice.to.response.user.UsersListResponseTO;
 import com.besmartkinopoiskservice.util.mapper.MovieMapper;
 import com.besmartkinopoiskservice.util.mapper.UserMapper;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
+
+    private final EntityManager entityManager;
 
     private final JwtService jwtService;
 
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserFavoriteMoviesListResponseTO getUserFavoriteMovies(String authorizationHeader, int pageSize, int offset) throws ServiceException, AuthenticationException {
+        if (authorizationHeader.equals("")) {throw new AuthenticationException("Неавторизованный запрос");}
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
         List<MovieEntity> favoriteMovies = user.get().getFavoriteMovies();
         List<MovieDetailsTO> favoriteMoviesDetails = new ArrayList<>();
@@ -65,31 +69,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public EmptyResponseTO addToUserFavoriteMovies(String authorizationHeader, AddUserFavoriteMovieRequestTO request) throws ServiceException, AuthenticationException {
+        if (authorizationHeader.equals("")) {throw new AuthenticationException("Неавторизованный запрос");}
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
-        Optional<MovieEntity> movie = Optional.ofNullable(movieRepository.findById(request.getMovieId()).orElseThrow(() -> new ServiceException("Фильма не существует")));
-        user.get().getFavoriteMovies().add(movie.get());
-        movie.get().getInUserFavorite().add(user.get());
+        MovieEntity movie = Optional.ofNullable(entityManager.getReference(MovieEntity.class, request.getMovieId())).orElseThrow(() -> new ServiceException("Фильма не существует"));
+        user.get().getFavoriteMovies().add(movie);
+        movie.getInUserFavorite().add(user.get());
         userRepository.save(user.get());
-        movieRepository.save(movie.get());
+        movieRepository.save(movie);
         return new EmptyResponseTO();
     }
 
     @Override
     public EmptyResponseTO deleteFromUserFavoriteMovies(String authorizationHeader, UUID movieId) throws ServiceException, AuthenticationException {
+        if (authorizationHeader.equals("")) {throw new AuthenticationException("Неавторизованный запрос");}
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByUsername(jwtService.extractUsername(authorizationHeader.substring(7))).orElseThrow(() -> new ServiceException("Ошибка поиска аккаунта")));
-        Optional<MovieEntity> movie = Optional.ofNullable(movieRepository.findById(movieId).orElseThrow(() -> new ServiceException("Фильма не существует")));
+        MovieEntity movie = Optional.ofNullable(entityManager.getReference(MovieEntity.class, movieId)).orElseThrow(() -> new ServiceException("Фильма не существует"));
         for (int i = 0; i < user.get().getFavoriteMovies().size(); i++) {
             if (user.get().getFavoriteMovies().get(i).getId().equals(movieId)) {
                 user.get().getFavoriteMovies().remove(i);
             }
         }
-        for (int i = 0; i < movie.get().getInUserFavorite().size(); i++) {
-            if (movie.get().getInUserFavorite().get(i).getId().equals(movieId)) {
-                movie.get().getInUserFavorite().remove(i);
+        for (int i = 0; i < movie.getInUserFavorite().size(); i++) {
+            if (movie.getInUserFavorite().get(i).getId().equals(user.get().getId())) {
+                movie.getInUserFavorite().remove(i);
             }
         }
         userRepository.save(user.get());
-        movieRepository.save(movie.get());
+        movieRepository.save(movie);
         return new EmptyResponseTO();
     }
 }
