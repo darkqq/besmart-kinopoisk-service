@@ -25,24 +25,29 @@ public class UserController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<UserDetailsResponseTO> getUserDetails(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader) throws ServiceException, AuthenticationException {
-        return ResponseEntity.ok(userService.getUserDetails(authorizationHeader));
+    public ResponseEntity<UserDetailsResponseTO> getUserDetails() throws ServiceException, AuthenticationException {
+        return ResponseEntity.ok(userService.getUserDetails());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<EmptyResponseTO> updateUserDetails(UpdateUserDetailsRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(userService.updateUserDetails(request));
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<UserFavoriteMoviesListResponseTO> getUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) throws ServiceException, AuthenticationException {
-        return ResponseEntity.ok(userService.getUserFavoriteMovies(authorizationHeader, pageSize, offset));
+    public ResponseEntity<UserFavoriteMoviesListResponseTO> getUserFavorite(@RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) throws ServiceException {
+        return ResponseEntity.ok(userService.getUserFavoriteMovies( pageSize, offset));
     }
 
     //owner
     @PutMapping("/favorite")
     public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException, AuthenticationException {
-        return ResponseEntity.ok(userService.addToUserFavoriteMovies(authorizationHeader, request));
+        return ResponseEntity.ok(userService.addToUserFavoriteMovies(request));
     }
 
     //owner, admin
     @DeleteMapping("/favorite")
     public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestParam(name = "movieid") UUID movieId) throws ServiceException, AuthenticationException {
-        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(authorizationHeader, movieId));
+        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(movieId));
     }
 }
