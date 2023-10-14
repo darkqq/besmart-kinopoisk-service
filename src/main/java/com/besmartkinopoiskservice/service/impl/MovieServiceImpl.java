@@ -48,7 +48,7 @@ public class MovieServiceImpl implements MovieService {
         if (!movie.isPresent()){
             throw new ServiceException("Ошибка при поиске фильма");
         }
-        return new MovieDetailsResponseTO(MovieMapper.toDto(movie.get()));
+        return new MovieDetailsResponseTO(MovieMapper.toFullDto(movie.get()));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class MovieServiceImpl implements MovieService {
 
         List<MovieDetailsTO> moviesDetails = new ArrayList<>();
         for (int i = 0; i < movies.size(); i++) {
-            moviesDetails.add(MovieMapper.toShortDto(movies.get(i)));
+            moviesDetails.add(MovieMapper.toDto(movies.get(i)));
         }
 
         return new MovieListResponseTO(moviesDetails);

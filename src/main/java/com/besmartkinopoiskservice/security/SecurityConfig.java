@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/resource/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/movie/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/movie/add")).hasAuthority(Role.ADMIN.toString())
                         .requestMatchers(new AntPathRequestMatcher("/movie/update/*")).hasAuthority(Role.ADMIN.toString())

@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class GetUserResponseTO {
-    private UserDetailsTO userPageDetails;
+public class UsersListResponseTO {
+    private List<UserDetailsTO> usersList;
 }

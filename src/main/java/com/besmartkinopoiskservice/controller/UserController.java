@@ -1,10 +1,13 @@
 package com.besmartkinopoiskservice.controller;
 
+import com.besmartkinopoiskservice.exception.AuthenticationException;
+import com.besmartkinopoiskservice.exception.ServiceException;
 import com.besmartkinopoiskservice.service.UserService;
 import com.besmartkinopoiskservice.to.request.user.*;
 import com.besmartkinopoiskservice.to.response.*;
 import com.besmartkinopoiskservice.to.response.user.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,31 +19,35 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("")
-    public ResponseEntity<GetUserResponseTO> getUserPage(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    @GetMapping("/list")
+    public ResponseEntity<UsersListResponseTO> getUsersList(@RequestParam(name = "username") String username, @RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) {
+        return ResponseEntity.ok(userService.getUsers(username, pageSize, offset));
     }
 
-    //owner, admin
-    @GetMapping("/info")
-    public ResponseEntity<GetUserShortInfoResponseTO> getUserInfo(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    @GetMapping("/details")
+    public ResponseEntity<UserDetailsResponseTO> getUserDetails() throws ServiceException, AuthenticationException {
+        return ResponseEntity.ok(userService.getUserDetails());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<EmptyResponseTO> updateUserDetails(UpdateUserDetailsRequestTO request) throws ServiceException {
+        return ResponseEntity.ok(userService.updateUserDetails(request));
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<GetMoviesListResponseTo> getUserFavorite(@RequestParam(name = "username") String username) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<UserFavoriteMoviesListResponseTO> getUserFavorite(@RequestParam(name = "pagesize", required = false, defaultValue = "10") int pageSize, @RequestParam(name = "offset", required = false, defaultValue = "0") int offset) throws ServiceException {
+        return ResponseEntity.ok(userService.getUserFavoriteMovies( pageSize, offset));
     }
 
     //owner
-    @PostMapping("favorite/add")
-    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestBody AddFavoriteRequestTO request) {
-        return ResponseEntity.ok(null);
+    @PutMapping("/favorite")
+    public ResponseEntity<EmptyResponseTO> addUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestBody AddUserFavoriteMovieRequestTO request) throws ServiceException, AuthenticationException {
+        return ResponseEntity.ok(userService.addToUserFavoriteMovies(request));
     }
 
     //owner, admin
-    @PutMapping("/favorite/delete")
-    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestParam(name = "movieid") UUID movieId) {
-        return ResponseEntity.ok(null);
+    @DeleteMapping("/favorite")
+    public ResponseEntity<EmptyResponseTO> deleteUserFavorite(@RequestHeader(value = HttpHeaders.AUTHORIZATION, defaultValue = "") String authorizationHeader, @RequestParam(name = "movieid") UUID movieId) throws ServiceException, AuthenticationException {
+        return ResponseEntity.ok(userService.deleteFromUserFavoriteMovies(movieId));
     }
 }

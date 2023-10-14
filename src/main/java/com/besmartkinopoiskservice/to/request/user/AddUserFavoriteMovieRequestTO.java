@@ -9,7 +9,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class AddFavoriteRequestTO {
-    private UUID userId;
-    private UUID movieID;
+public class AddUserFavoriteMovieRequestTO {
+    private UUID movieId;
 }
